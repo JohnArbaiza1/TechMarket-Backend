@@ -17,10 +17,18 @@ class User extends Authenticatable
      *
      * @var list<string>
      */
+
+    protected $table = 'tbl_users';
+
     protected $fillable = [
-        'name',
+        'user_name',
         'email',
-        'password',
+        'user_pass',
+        'published',
+        'id_membership',
+        'membership_status',
+        'user_rating',
+        'remenber_token',
     ];
 
     /**
@@ -29,8 +37,8 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $hidden = [
-        'password',
-        'remember_token',
+        'user_pass',
+        'remenber_token',
     ];
 
     /**
@@ -42,7 +50,7 @@ class User extends Authenticatable
     {
         return [
             'email_verified_at' => 'datetime',
-            'password' => 'hashed',
+            'user_pass' => 'hashed',
         ];
     }
 }
