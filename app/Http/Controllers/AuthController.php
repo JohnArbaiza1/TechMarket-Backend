@@ -46,7 +46,36 @@ class AuthController extends Controller
     }
 
     //metodo para el login
-    public function login(Request $request) {}
+    public function login(Request $request) {
+        try {
+            
+            $request->validate([
+                'login' => 'required', // Puede ser email o username
+                'user_pass' => 'required',
+            ]);
+
+            
+            $user = User::where('email', $request->login)->orWhere('user_name', $request->login)->first();
+    
+            if (!$user || !Hash::check($request->user_pass, $user->user_pass)) {
+                return response()->json([
+                    'message' => 'Credenciales incorrectas',
+                ], 401);
+            }
+
+            $token = $user->createToken($user->email)->plainTextToken;
+
+            //Retornamos el token
+            return response()->json([
+                'token' => $token,
+                'user' => $user,
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                "error" => $e->getMessage(),
+            ], 500);
+        }
+    }
 
     //metodo para el cierre de sesión 
     public function logout(Request $request) {}
