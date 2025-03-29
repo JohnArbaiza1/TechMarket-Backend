@@ -13,6 +13,8 @@ Route::post('/login', [AuthController::class, 'login']);
 
 //Estas rutas requieren autenticacion mediante un token
 Route::middleware('auth:sanctum')->group(function () {
+    //Ruta para obtener el usuario con el token
+    Route::get('/me', [AuthController::class, 'getUser']);
     //Ruta de cerrar sesion
     Route::post('/logout', [AuthController::class, 'logout']);
 
@@ -24,6 +26,6 @@ Route::middleware('auth:sanctum')->group(function () {
     //Ruta para actualizar un perfil
     Route::put('/profile/{id_user}', [ProfileController::class, 'updateProfile']);
 
-    
+
 });
 

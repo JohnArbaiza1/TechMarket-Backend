@@ -99,7 +99,18 @@ class AuthController extends Controller
                 'error' => $e->getMessage(),
             ], 500);
         }
-        
     }
+    //obtener informacion del usuario mediante token
+    public function getUser(Request $request) {
+        try {
+            $user = $request->user();
+            return response()->json($user, 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
 }
 
