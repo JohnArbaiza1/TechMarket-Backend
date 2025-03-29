@@ -10,3 +10,20 @@ Route::get('/user', function (Request $request) {
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
+
+//Estas rutas requieren autenticacion mediante un token
+Route::middleware('auth:sanctum')->group(function () {
+    //Ruta de cerrar sesion
+    Route::post('/logout', [AuthController::class, 'logout']);
+
+
+    //Ruta para crear un perfil
+    Route::post('/profile', [ProfileController::class, 'createProfile']);
+    //Ruta para obtener un perfil
+    Route::get('/profile/{id_user}', [ProfileController::class, 'getProfile']);
+    //Ruta para actualizar un perfil
+    Route::put('/profile/{id_user}', [ProfileController::class, 'updateProfile']);
+
+    
+});
+

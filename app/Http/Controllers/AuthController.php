@@ -78,5 +78,28 @@ class AuthController extends Controller
     }
 
     //metodo para el cierre de sesión 
-    public function logout(Request $request) {}
+    public function logout(Request $request) {
+        try {
+            // Se obtiene el token de la solicitud
+            $token = $request->bearerToken();
+
+            if (!$token) {
+                return response()->json([
+                    'message' => 'Token no proporcionado',
+                ], 400);
+            }
+
+            $request->user()->currentAccessToken()->delete();
+
+            return response()->json([
+                'message' => 'Sesión cerrada correctamente',
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+        
+    }
 }
+
