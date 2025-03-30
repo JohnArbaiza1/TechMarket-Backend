@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->string('publication_description');
-            $table->string('publication_image');
+            $table->string('publication_image')->nullable();
             $table->unsignedBigInteger('id_user');
             $table->foreign('id_user')->references('id')->on('tbl_users');
             $table->integer('quota')->default(1);

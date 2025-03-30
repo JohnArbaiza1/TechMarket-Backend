@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Models\Profiles;
+use App\Models\User;
 
 use Illuminate\Http\Request;
 
@@ -11,12 +13,12 @@ class ProfileController extends Controller
         try {
             // Validar los datos de entrada
             $request->validate([
-                'id_user' => 'required|integer',
                 'first_name' => 'nullable|string|max:255',
                 'last_name' => 'nullable|string|max:255',
                 'phone_number' => 'nullable|string|max:9',
                 'address' => 'nullable|string|max:255',
                 'description' => 'nullable|string|max:1000',
+                'id_user' => 'required|integer'
             ]);
             // Verificar si el usuario existe
             $user = User::find($request->id_user);
@@ -30,8 +32,8 @@ class ProfileController extends Controller
             }
             //formatear telefono
             $request->phone_number = preg_replace('/[^0-9]/', '', $request->phone_number);
-            // Verificar si el teléfono tiene 9 dígitos
-            if (strlen($request->phone_number) != 9) {
+            // Verificar si el teléfono tiene 8 dígitos
+            if (strlen($request->phone_number) != 8) {
                 return response()->json(['error' => 'El numero de telefono no debe de superar 8 digitos'], 422);
             }
             // Verificar si el nombre y apellido tienen un máximo de 255 caracteres
@@ -48,6 +50,7 @@ class ProfileController extends Controller
             }
             //Formatear telefono
             $request->phone_number = substr($request->phone_number, 0, 4) . '-' . substr($request->phone_number, 4);
+
 
             // Crear el perfil
             $profile = Profiles::create($request->all());
@@ -79,6 +82,7 @@ class ProfileController extends Controller
                 'phone_number' => 'nullable|string|max:9',
                 'address' => 'nullable|string|max:255',
                 'description' => 'nullable|string|max:1000',
+                
             ]);
             // Verificar si el perfil existe
             $profile = Profiles::where('id_user', $id_user)->first();
@@ -87,8 +91,8 @@ class ProfileController extends Controller
             }
             //Formatear telefono
             $request->phone_number = substr($request->phone_number, 0, 4) . '-' . substr($request->phone_number, 4);
-            // Verificar si el teléfono tiene 9 dígitos
-            if (strlen($request->phone_number) != 9) {
+            // Verificar si el teléfono tiene 8 dígitos
+            if (strlen($request->phone_number) != 8) {
                 return response()->json(['error' => 'El numero de telefono no debe de superar 8 digitos'], 422);
             }
             // Verificar si el nombre y apellido tienen un máximo de 255 caracteres
@@ -105,6 +109,7 @@ class ProfileController extends Controller
             }
             //Formatear telefono
             $request->phone_number = substr($request->phone_number, 0, 4) . '-' . substr($request->phone_number, 4);
+
 
             // Actualizar el perfil
             $profile->update($request->all());
