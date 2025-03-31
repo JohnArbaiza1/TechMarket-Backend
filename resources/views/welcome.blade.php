@@ -9,6 +9,7 @@
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&family=Tektur:wght@400..900&display=swap" rel="stylesheet">
 
         <!-- Styles / Scripts -->
         @if (file_exists(public_path('build/manifest.json')) || file_exists(public_path('hot')))
@@ -58,6 +59,35 @@
                         @endif
                     </header>
 
+                    <main class="mt-6 flex justify-center items-center w-full">
+                        <div class="flex flex-col justify-center items-center">
+                            <h1 style="font-weight: 600;  font-family: Tektur, sans-serif; font-size: 30px; color: #d6d3d3; text-align:center;">Bienvenido a la API del Equipo de TechMarket</h1>
+                            <br>
+                            <div class="w-full max-w-md p-8 rounded-lg shadow-lg" style="background-color: oklch(0.269 0 0);">
+                                <form action="" class="mt-6">
+                                    <div class="mb-6">
+                                        <label class="block text-gray-300 mb-1">Usuario</label>
+                                        <input type="text" placeholder="Ingresa tu usuario" 
+                                            class="w-full px-4 py-2 rounded-lg bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                    </div>
+                        
+                                    <div class="mb-6">
+                                        <label class="block text-gray-300 mb-1">Contraseña</label>
+                                        <input type="password" placeholder="••••••••"
+                                            class="w-full px-4 py-2 rounded-lg bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                    </div>
+                        
+                                    <button type="submit"
+                                    class="mt-6 w-full text-white font-semibold py-2 rounded-lg transition 
+                                    bg-[oklch(0.514_0.222_16.935)] hover:bg-[oklch(0.614_0.322_16.935)]">
+                                        Iniciar sesión
+                                    </button>
+                                </form>
+                                <br>
+                            </div>
+                        </div>
+                    </main>
+{{-- 
                     <main class="mt-6">
                         <div class="grid gap-6 lg:grid-cols-2 lg:gap-8">
                             <a
@@ -163,11 +193,12 @@
                                     </p>
                                 </div>
                             </div>
-                        </div>
+                        </div> --}}
                     </main>
 
-                    <footer class="py-16 text-center text-sm text-black dark:text-white/70">
-                        Laravel v{{ Illuminate\Foundation\Application::VERSION }} (PHP v{{ PHP_VERSION }})
+                    <footer class="pt-16 text-center text-sm text-black dark:text-white/70">
+                        {{-- Laravel v{{ Illuminate\Foundation\Application::VERSION }} (PHP v{{ PHP_VERSION }}) --}}
+                        <p> TechMarket &copy; 2025</p>
                     </footer>
                 </div>
             </div>
