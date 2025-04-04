@@ -14,13 +14,56 @@ class MembershipsTableSeeder extends Seeder
     public function run(): void
     {
         DB::table('tbl_memberships')->insert([
-            'membership_name' => 'Inicial',
-            'price' => 0.00,
-            'membership_description' => 'Plan Inicial gratuito',
-            'unlimited_applications' => false,
-            'unlimited_publications' => false,
-            'created_at' => now(),
-            'updated_at' => now(),
+            // Plan Inicial
+            [
+                'membership_name' => 'Inicial',
+                'price' => 0.00,
+                'membership_description' => 'Plan Inicial gratuito',
+                'unlimited_applications' => false,
+                'unlimited_publications' => false,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            // Plan Pro
+            [
+                'membership_name' => 'Pro',
+                'price' => 10.00,
+                'membership_description' => 'El plan pro incluye: Amplía tus posibilidades con 8 postulaciones mensuales. Conéctate y colabora en hasta 4 Proyectos Múltiples. Publicación de hasta 3 proyectos. Destácate entre la multitud con mayor visibilidad en la plataforma.',
+                'unlimited_applications' => false,
+                'unlimited_publications' => false,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            // Plan Inicial Enterprise
+            [
+                'membership_name' => 'Inicial Enterprise',
+                'price' => 0.00,
+                'membership_description' => 'El plan inicial Enterprise incluye: Publica 1 proyecto y atrae al profesional ideal. Evalúa hasta 2 candidatos para elegir al mejor. Visibilidad básica para tu proyecto en la plataforma.',
+                'unlimited_applications' => false,
+                'unlimited_publications' => false,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            // Plan Pro Enterprise
+            [
+                'membership_name' => 'Pro Enterprise',
+                'price' => 20.00,
+                'membership_description' => 'El plan Pro Enterprise incluye: Publica 5 proyectos al mes y amplía tus opciones. Evalúa hasta 8 candidatos para elegir al mejor. Visibilidad destacada para atraer talento top.',
+                'unlimited_applications' => false,
+                'unlimited_publications' => false,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            // Plan Todo en Uno
+            [
+                'membership_name' => 'Todo en Uno',
+                'price' => 28.00,
+                'membership_description' => 'El plan Todo en Uno incluye: Postulaciones y Publicaciones Ilimitadas. Expande tu red y colabora en Múltiples Proyectos. Encuentra al talento perfecto con Evaluaciones Ilimitadas. Visibilidad Máxima. Descubre lo último primero con Acceso Exclusivo Anticipado.',
+                'unlimited_applications' => true,
+                'unlimited_publications' => true,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
         ]);
     }
 }
