@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('membership_name');
             $table->double('price', 8, 2);
-            $table->string('membership_description');
+            $table->text('membership_description');
             $table->boolean('unlimited_applications')->default(false);
             $table->boolean('unlimited_publications')->default(false);
             $table->timestamps();
