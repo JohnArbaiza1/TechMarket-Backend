@@ -25,6 +25,9 @@ Route::get('/listMemberships', [MembershipsController::class, 'listMemberships']
  Route::get('/publications', [PublicationsController::class, 'listPublications']);
  //Ruta para listar las publicaciones de un usuario
  Route::get('/publications/{id_user}', [PublicationsController::class, 'listPublicationsByUser']);
+ // Ruta para obtener el límite de publicaciones de un usuario basado en su plan
+Route::get('/user/{id_user}/publication-limit', [PublicationsController::class, 'getPublicationLimit']);
+
 
 
  //Estas rutas requieren autenticacion mediante un token
