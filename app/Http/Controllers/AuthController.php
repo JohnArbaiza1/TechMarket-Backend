@@ -35,8 +35,12 @@ class AuthController extends Controller
                 'updated_at' => now(),
             ]);
 
+            $token = $user->createToken($user->email)->plainTextToken;
             //Retornamos una respuesta indicando que el usuario fue creado correctamente
-            return response($user, Response::HTTP_CREATED);
+            return response()->json([
+                'token' => $token,
+                'user' => $user,
+            ], 200);
         } catch (\Exception $e) {
             // En caso de error, retornar un mensaje de error con el detalle de la excepción
             return response()->json([
