@@ -46,7 +46,7 @@ class PublicationsController extends Controller
                 $maxPublications = 10;
                 break;
             case 3: // Plan Enterprise Inicial
-                $maxPublications = 1;
+                $maxPublications = 100;
                 break;
             case 4: // Plan Pro Enterprise
                 $maxPublications = 5;
@@ -192,6 +192,9 @@ class PublicationsController extends Controller
     {
         try {
             $publications = Publications::all();
+            if ($publications->isEmpty()) {
+                return response()->json(['error' => 'No se encontraron publicaciones'], 404);
+            }
 
             return response()->json($publications, 200);
         } catch (\Exception $e) {
