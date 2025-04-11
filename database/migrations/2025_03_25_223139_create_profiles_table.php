@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('phone_number');
             $table->string('address');
             $table->string('description');
+            $table->string('image_url')->nullable(); 
             $table->unsignedBigInteger('id_user');
             $table->foreign('id_user')->references('id')->on('tbl_users');
             $table->timestamps();

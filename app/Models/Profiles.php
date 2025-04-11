@@ -15,6 +15,7 @@ class Profiles extends Model
         'phone_number',
         'address',
         'description',
+        'image_url', 
         'id_user',
         'created_at',
         'updated_at'

@@ -17,6 +17,7 @@ class ProfileController extends Controller
                 'last_name' => 'nullable|string|max:255',
                 'phone_number' => 'nullable|string|max:9',
                 'address' => 'nullable|string|max:255',
+                'image_url' => 'nullable|string|max:255',
                 'description' => 'nullable|string|max:1000',
                 'id_user' => 'required|integer'
             ]);
@@ -82,6 +83,7 @@ class ProfileController extends Controller
                 'phone_number' => 'nullable|string|max:9',
                 'address' => 'nullable|string|max:255',
                 'description' => 'nullable|string|max:1000',
+                'image_url' => 'nullable|string|max:255',
                 
             ]);
             // Verificar si el perfil existe
