@@ -19,6 +19,10 @@ class ProfileController extends Controller
                 'address' => 'nullable|string|max:255',
                 'image_url' => 'nullable|string|max:255',
                 'description' => 'nullable|string|max:1000',
+                'social_media_links' => 'nullable|string|max:1000',
+                'education' => 'nullable|string|max:1000',
+                'work_experience' => 'nullable|string|max:1000',
+                'skills' => 'nullable|string|max:1000',
                 'id_user' => 'required|integer'
             ]);
             // Verificar si el usuario existe
@@ -84,6 +88,10 @@ class ProfileController extends Controller
                 'address' => 'nullable|string|max:255',
                 'description' => 'nullable|string|max:1000',
                 'image_url' => 'nullable|string|max:255',
+                'social_media_links' => 'nullable|string|max:1000',
+                'education' => 'nullable|string|max:1000',
+                'work_experience' => 'nullable|string|max:1000',
+                'skills' => 'nullable|string|max:1000',
             ]);
 
             // Verificar si el perfil existe

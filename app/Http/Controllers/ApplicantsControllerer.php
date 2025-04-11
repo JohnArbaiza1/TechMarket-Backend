@@ -69,7 +69,7 @@ class ApplicantsControllerer extends Controller
             $applicants = Applicants::where('id_user', $id_user)->get();
 
             if ($applicants->isEmpty()) {
-                return response()->json(['error' => 'No hay solicitantes para este usuario'], 404);
+                return response()->json($applicants, 200);
             }
 
             return response()->json($applicants, 200);
@@ -84,6 +84,24 @@ class ApplicantsControllerer extends Controller
 
             if (!$applicant) {
                 return response()->json(['error' => 'Solicitante no encontrado'], 404);
+            }
+
+            $applicant->delete();
+
+            return response()->json(['message' => 'Solicitante eliminado con éxito'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+    public function deleteApplicantByUserPublication($user_id, $publication_id)
+    {
+        try {
+            $applicant = Applicants::where('id_publication', $publication_id)
+                ->where('id_user', $user_id)
+                ->first();
+
+            if (!$applicant) {
+                return response()->json(['error' => 'Solicitante no encontrado'], 203);
             }
 
             $applicant->delete();

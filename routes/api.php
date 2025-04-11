@@ -72,6 +72,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/applicants/user/{id_user}', [ApplicantsControllerer::class, 'getApplicantsByUser']);
     //Ruta para eliminar un solicitante
     Route::delete('/applicant/{id_applicant}', [ApplicantsControllerer::class, 'deleteApplicant']);
+    //Ruta para eliminar al solicitante por id de usuario y publicacion
+    Route::delete('/applicants/user/{id_user}/publication/{id_publication}', [ApplicantsControllerer::class, 'deleteApplicantByUserPublication']);
 
 
 });

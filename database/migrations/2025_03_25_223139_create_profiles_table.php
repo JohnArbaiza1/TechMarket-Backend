@@ -19,6 +19,10 @@ return new class extends Migration
             $table->string('address');
             $table->string('description');
             $table->string('image_url')->nullable(); 
+            $table->string('social_media_links')->nullable();
+            $table->string('education')->nullable();
+            $table->string('work_experience')->nullable();
+            $table->string('skills')->nullable();
             $table->unsignedBigInteger('id_user');
             $table->foreign('id_user')->references('id')->on('tbl_users');
             $table->timestamps();
