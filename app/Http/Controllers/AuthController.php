@@ -19,6 +19,7 @@ class AuthController extends Controller
                 'user_name' => 'required|max:255',
                 'email' => 'required|email|unique:tbl_users,email',
                 'user_pass' => 'required|min:8|regex:/[A-Za-z]/|regex:/[0-9]/|regex:/[$!%*?&-.]/',
+                'id_membership' => 'required|in:1,3',
             ]);
 
             //crea el nuevo usuario para almacenarlo en la DB
@@ -27,7 +28,7 @@ class AuthController extends Controller
                 'email' => $request->email,
                 'user_pass' => Hash::make($request->user_pass), //Password cifrado
                 'published' => false,
-                'id_membership' => 1,
+                'id_membership'=> $request->id_membership,
                 'membership_status' => false,
                 'user_rating' => 0,
                 'remenber_token' => Str::random(60), // Token aleatorio
