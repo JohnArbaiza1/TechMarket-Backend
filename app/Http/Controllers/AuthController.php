@@ -117,5 +117,18 @@ class AuthController extends Controller
         }
     }
 
+    // Metodo para mostrar todos los usuarios registrados
+    public function listUsers()
+    {
+        try {
+            $users = User::all();
+            return response()->json($users, 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
 }
 

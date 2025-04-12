@@ -34,6 +34,8 @@ Route::get('/user/{id_user}/publication-limit', [PublicationsController::class, 
 Route::middleware('auth:sanctum')->group(function () {
     //Ruta para obtener el usuario con el token
     Route::get('/me', [AuthController::class, 'getUser']);
+    //Ruta para listar los usuarios registrados
+    Route::get('/users', [AuthController::class, 'listUsers']);
     //Ruta de cerrar sesion
     Route::post('/logout', [AuthController::class, 'logout']);
 
