@@ -70,7 +70,7 @@ class ProfileController extends Controller
         try {
             $profile = Profiles::where('id_user', $id_user)->first();
             if (!$profile) {
-                return response()->json(['error' => 'Perfil no encontrado'], 404);
+                return response()->json([], 200);
             }
             return response()->json($profile, 200);
         } catch (\Exception $e) {
