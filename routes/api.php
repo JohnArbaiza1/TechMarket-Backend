@@ -46,6 +46,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/profile/{id_user}', [ProfileController::class, 'getProfile']);
     //Ruta para actualizar un perfil
     Route::put('/profile/{id_user}', [ProfileController::class, 'updateProfile']);
+    //Ruta para obtener el perfil de un usuario
+    Route::get('/profile/user/{user_name}', [ProfileController::class, 'getProfileByUserName']);
 
 
     //Ruta para crear una membresia

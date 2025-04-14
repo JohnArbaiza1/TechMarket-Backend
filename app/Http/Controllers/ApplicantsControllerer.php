@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Models\Applicants;
+use App\Models\Profiles;
 use App\Models\Publications;
 use App\Models\User;
 
@@ -55,9 +56,25 @@ class ApplicantsControllerer extends Controller
             $applicants = Applicants::where('id_publication', $id_publication)->get();
 
             if ($applicants->isEmpty()) {
-                return response()->json(['error' => 'No hay solicitantes para esta publicación'], 404);
+                return response()->json([], 200);
             }
-
+            // Obtener los detalles de los usuarios
+            foreach ($applicants as $applicant) {
+                $user = User::select('id', 'user_name', 'email')->find($applicant->id_user);
+                if ($user) {
+                    $applicant->users = $user;
+                    //obtener informacion del perfil
+                    $profile = Profiles::select('id','first_name', 'last_name', 'image_url')->where('id_user', $applicant->id_user)->first();
+                    if ($profile) {
+                        $applicant->users->profile = $profile;
+                    } else {
+                        return response()->json(['error' => 'Perfil del usuario no encontrado'], 200);
+                    }
+                } else {
+                    return response()->json(['error' => 'Usuario no encontrado'], 200);
+                }
+            }
+            // Devolver la lista de solicitantes con detalles de usuario
             return response()->json($applicants, 200);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);

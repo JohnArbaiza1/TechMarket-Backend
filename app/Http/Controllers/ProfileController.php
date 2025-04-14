@@ -133,4 +133,31 @@ class ProfileController extends Controller
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
+
+    //obtener perfil por user_name
+    public function getProfileByUserName($user_name)
+    {
+        try {
+    
+            if (empty($user_name) || !is_string($user_name)) {
+                return response()->json(['error' => 'Nombre de usuario inválido'], 400);
+            }
+            $user = User::where('user_name', $user_name)->first();
+    
+            if (!$user) {
+                return response()->json(['error' => 'Usuario no encontrado'], 200);
+            }
+
+            $user->profile = Profiles::where('id_user', $user->id)->first();
+    
+            if (!$user->profile) {
+                return response()->json([], 200);
+            }
+    
+            return response()->json($user, 200);
+    
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
 }
