@@ -130,5 +130,17 @@ class AuthController extends Controller
         }
     }
 
+    //Metodo de prueba para cargar los datos del usuario desde el backend
+    public function showUserList()
+    {
+        try {
+            $users = User::all();
+            return view('administration.users', compact('users'));
+        } catch (\Exception $e) {
+            // Capturamos cualquier excepción y la mostramos
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+
 }
 

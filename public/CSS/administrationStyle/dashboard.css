@@ -1,0 +1,32 @@
+/* Variables style del dashboard*/
+:root{
+    --moradoOscuro:#2E186A;
+    --moradoClaro:#5E308C;
+}
+
+.logo-title{
+    font-family: "Tektur", sans-serif;
+    font-weight: 600;
+    font-size: 20px;
+    color: white;
+}
+
+.icon{
+    color: white;
+}
+.opciones{
+    font-family: "Raleway", sans-serif;
+    color: white;
+    font-weight: 500;
+}
+
+.datos{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+}
+
+
+

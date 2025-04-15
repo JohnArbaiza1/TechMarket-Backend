@@ -14,6 +14,9 @@ export default {
             fontFamily: {
                 sans: ['Figtree', ...defaultTheme.fontFamily.sans],
             },
+            colors: {
+                'morado-claro': '#5E308C',
+            },
         },
     },
     plugins: [],
