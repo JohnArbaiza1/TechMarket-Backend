@@ -41,6 +41,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/users', [AuthController::class, 'listUsers']);
     //Ruta de cerrar sesion
     Route::post('/logout', [AuthController::class, 'logout']);
+    //Ruta para obtener un usuario por su id
+    Route::get('/user/{id_user}', [AuthController::class, 'getUserById']);
 
 
     //Ruta para crear un perfil
