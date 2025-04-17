@@ -1,6 +1,6 @@
 @extends('administration.dashboard')
 
-@section('title', 'Usuarios')
+@section('title', 'Publicaciones')
 
 @section('content')
     <br>
@@ -27,25 +27,32 @@
             <thead class="bg-morado-oscuro text-white uppercase text-sm">
                 <tr>
                     <th class="py-3 px-4 border-b">ID</th>
-                    <th class="py-3 px-4 border-b">Name</th>
-                    <th class="py-3 px-4 border-b">Email</th>
-                    <th class="py-3 px-4 border-b">ID Plan</th>
-                    <th class="py-3 px-4 border-b">Membership Status</th>
+                    <th class="py-3 px-4 border-b">user id</th>
+                    <th class="py-3 px-4 border-b">Title</th>
+                    <th class="py-3 px-4 border-b">Description</th>
+                    <th class="py-3 px-4 border-b">IMG</th>
+                    <th class="py-3 px-4 border-b">Quota</th>
+                    <th class="py-3 px-4 border-b">Publication Status</th>
+                    <th class="py-3 px-4 border-b">Tags</th>
                     <th class="py-3 px-4 border-b">options</th>
                 </tr>
             </thead>
             <tbody class="text-gray-700">
-                @foreach($users as $user)
-                    <tr class="hover:bg-gray-100">
-                        <td class="py-3 px-4 border-b">{{ $user->id }}</td>
-                        <td class="py-3 px-4 border-b">{{ $user->user_name }}</td>
-                        <td class="py-3 px-4 border-b">{{ $user->email }}</td>
-                        <td class="py-3 px-4 border-b">{{ $user->id_membership }}</td>
-                        <td class="py-3 px-4 border-b">{{ $user->membership_status }}</td>
-                        <td class="py-3 px-4 border-b flex space-x-2">
+                @foreach($publication as $item)
+                <tr class="hover:bg-gray-100">
+                    <td class="py-3 px-4 border-b">{{ $item->id }}</td>
+                    <td class="py-3 px-4 border-b">{{ $item->id_user }}</td>
+                    <td class="py-3 px-4 border-b">{{ $item->title }}</td>
+                    <td class="py-3 px-4 border-b">{{ $item->publication_description }}</td>
+                    <td class="py-3 px-4 border-b">{{ $item->publication_image }}</td>
+                    <td class="py-3 px-4 border-b">{{ $item->quota }}</td>
+                    <td class="py-3 px-4 border-b">{{ $item->publication_status }}</td>
+                    <td class="py-3 px-4 border-b">{{ $item->tags }}</td>
+                    <td class="py-3 px-4 border-b">
+                        <div class="flex flex-col space-y-2">
                             <!-- Botón Editar -->
                             <a href="" class="bg-[#5E308C] text-white px-4 py-2 rounded hover:bg-[#4a1f6a]">Editar</a>
-
+                    
                             <!-- Botón Eliminar -->
                             <form action="" method="POST" onsubmit="return confirm('¿Estás seguro de que deseas eliminar este usuario?');">
                                 @csrf
@@ -53,9 +60,10 @@
                                 <button type="submit" 
                                 class="bg-[#BC522B] text-white px-4 py-2 rounded hover:bg-[#9e3d1c]">Eliminar</button>
                             </form>
-                        </td>
-                    </tr>
-                @endforeach
+                        </div>
+                    </td>
+                </tr>
+            @endforeach            
             </tbody>
         </table>
     </div>

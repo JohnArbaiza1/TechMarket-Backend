@@ -216,4 +216,35 @@ class PublicationsController extends Controller
         }
     }
 
+    /********************* Metodos para el Panel de Administración *********************/
+    //Metodo para listar las publicaciones desde el backend
+    public function showPublicationList(Request $request)
+    {
+        try {
+            $search = $request->input('search');
+    
+            // Creamos una query base
+            $query = Publications::query();
+    
+            // Si hay búsqueda, aplicamos el filtro
+            if ($search) {
+                $query->where('title', 'like', "%$search%")
+                    ->orWhere('id', 'like', "%$search%");
+            }
+    
+            // Ejecutamos la consulta
+            $publications = $query->get();
+    
+            // Pasamos la data a la vista
+            return view('administration.publication', [
+                'publication' => $publications,
+                'search' => $search,
+            ]);
+            
+        } catch (\Throwable $th) {
+            return response()->json(['error' => $th->getMessage()], 500);
+        }
+    }
+    
+
 }

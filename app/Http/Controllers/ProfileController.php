@@ -160,4 +160,17 @@ class ProfileController extends Controller
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
+
+    /********************* Metodos para el Panel de Administración *********************/
+        //Metodo  para cargar los datos del perfil desde el backend
+        public function showProfileList()
+        {
+            try {
+                $profile = Profiles::all();
+                return view('administration.profile', compact('profile'));
+            } catch (\Exception $e) {
+                // Capturamos cualquier excepción y la mostramos
+                return response()->json(['error' => $e->getMessage()], 500);
+            }
+        }
 }

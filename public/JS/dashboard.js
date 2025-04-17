@@ -13,6 +13,9 @@ function messageDashboard(opcion){
         case 'perfiles':
             mensaje = 'Datos de los Perfiles de Usuarios';
             break;
+        case 'rol':
+            mensaje = 'Roles Creados y Asignados';
+            break;
         case 'publicaciones':
             mensaje = 'Datos de Publicaciones';
             break;

@@ -130,17 +130,82 @@ class AuthController extends Controller
         }
     }
 
-    //Metodo de prueba para cargar los datos del usuario desde el backend
-    public function showUserList()
+    /********************* Metodos para el Panel de Administración *********************/
+
+    // Mostrar el formulario de login
+    public function showLoginForm()
     {
+        if (auth()->check()) {
+            $user = auth()->user();
+
+            if ($user->hasRole('admin') || $user->hasRole('editor')) {
+                return redirect()->route('administration.dashboard');
+            }
+        }
+
+        return view('auth.login');
+    }
+
+
+    //Metodo para procesar el login de administración
+    public function adminLogin(Request $request){
+
         try {
-            $users = User::all();
-            return view('administration.users', compact('users'));
+            $request->validate([
+                'login' => 'required', // Email o username
+                'user_pass' => 'required',
+            ]);
+    
+            $user = User::where('email', $request->login)
+                        ->orWhere('user_name', $request->login)
+                        ->first();
+    
+            if (!$user || !Hash::check($request->user_pass, $user->user_pass)) {
+                return back()->withErrors(['login' => 'Credenciales incorrectas']);
+            }
+    
+            // Verificar si el usuario tiene los roles necesarios
+            if (!$user->hasRole('admin') && !$user->hasRole('editor')) {
+                return back()->withErrors(['login' => 'No tienes permisos para acceder al panel de administración']);
+            }
+    
+            // Autenticación web (usando sesiones en lugar de tokens)
+            auth()->login($user);
+
+            \Log::info('Usuario autenticado: ' . $user->user_name . ', redirigiendo a dashboard');
+    
+            // Redirigir al dashboard admin
+            return redirect()->route('administration.dashboard');
+            
         } catch (\Exception $e) {
-            // Capturamos cualquier excepción y la mostramos
-            return response()->json(['error' => $e->getMessage()], 500);
+            \Log::error('Error en login: ' . $e->getMessage());
+            return back()->withErrors(['error' => $e->getMessage()]);
         }
     }
 
+    // Método para cerrar sesión en el panel
+    public function adminLogout()
+    {
+        auth()->logout();
+        return redirect()->route('home');
+    }
+
+    //Metodo de prueba para cargar los datos del usuario desde el backend
+    public function showUserList(Request $request)
+    {
+        try {
+            $search = $request->input('search');
+    
+            $users = User::when($search, function ($q) use ($search) {
+                $q->where('user_name', 'like', "%$search%")
+                ->orWhere('email', 'like', "%$search%");
+            })->get();
+    
+            return view('administration.users', compact('users', 'search'));
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+    
 }
 
