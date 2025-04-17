@@ -129,7 +129,6 @@ class AuthController extends Controller
             ], 500);
         }
     }
-
     /********************* Metodos para el Panel de Administración *********************/
 
     // Mostrar el formulario de login
@@ -207,5 +206,18 @@ class AuthController extends Controller
         }
     }
     
+    // Metodo para mostrar un usuario por su id
+    public function getUserById($id)
+    {
+        try {
+            $user = User::findOrFail($id)->only(['id', 'user_name']);
+            return response()->json($user, 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
 }
 
