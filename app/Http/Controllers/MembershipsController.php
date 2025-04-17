@@ -91,4 +91,19 @@ class MembershipsController extends Controller
         }
     }
 
+    /********************* Metodos para el Panel de Administración *********************/
+    //Metodo para listar los planes desde el backend
+    public function showPlanesList(Request $request)
+    {
+        try {
+            $membership = Memberships::all();
+            return view('administration.planes', [
+                'planes' => $membership
+            ]);
+        } catch (\Exception $e) {
+            // Capturamos cualquier excepción y la mostramos
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+
 }
