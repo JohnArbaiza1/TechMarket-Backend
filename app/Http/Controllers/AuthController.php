@@ -19,7 +19,7 @@ class AuthController extends Controller
                 'user_name' => 'required|max:255',
                 'email' => 'required|email|unique:tbl_users,email',
                 'user_pass' => 'required|min:8|regex:/[A-Za-z]/|regex:/[0-9]/|regex:/[$!%*?&-.]/',
-                'id_membership' => 'required|in:1,3',
+                'id_membership' => 'required|in:1,2,3,4,5',
             ]);
 
             //crea el nuevo usuario para almacenarlo en la DB
@@ -199,13 +199,100 @@ class AuthController extends Controller
             $users = User::when($search, function ($q) use ($search) {
                 $q->where('user_name', 'like', "%$search%")
                 ->orWhere('email', 'like', "%$search%");
-            })->get();
+            })->paginate(10);
     
             return view('administration.users', compact('users', 'search'));
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
+
+    public function showCreateUserForm() {
+        return view('Create.createUser'); 
+    }
+
+    public function showEditUserForm($id) {
+        $user = User::findOrFail($id);
+        return view('Edit.editUser', compact('user'));
+    }
+    
+
+    //Metodo para crear usuario desde el backend
+    public function createNewUser(Request $request){
+        try {
+            $request->validate([
+                'user_name' => 'required|max:255',
+                'email' => 'required|email|unique:tbl_users,email',
+                'user_pass' => 'required|min:8|regex:/[A-Za-z]/|regex:/[0-9]/|regex:/[$!%*?&-.]/',
+                'id_membership' => 'required|in:1,2,3,4,5',
+            ]);
+
+            $user = User::create([
+                'user_name' => $request->user_name,
+                'email' => $request->email,
+                'user_pass' => Hash::make($request->user_pass),
+                'id_membership' => $request->id_membership,
+                'published' => $request->published ?? false,
+                'membership_status' => $request->membership_status ?? false,
+                'user_rating' => 0,
+                'remenber_token' => Str::random(60),
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+
+            return redirect()->route('administration.users')->with('success', 'Usuario creado correctamente');
+    
+        } catch (\Throwable $th) {
+            return back()->withErrors(['error' => $th->getMessage()]);
+        }
+    }
+
+    //Metodo para Actualizar usuario
+    public function updateUser(Request $request, $id)
+    {
+        try {
+            $request->validate([
+                'user_name' => 'required|max:255',
+                'email' => 'required|email|unique:tbl_users,email,' . $id,
+                'id_membership' => 'required|in:1,2,3,4,5',
+            ]);
+
+            $user = User::findOrFail($id);
+            $user->user_name = $request->user_name;
+            $user->email = $request->email;
+            $user->id_membership = $request->id_membership;
+            $user->published = $request->published ?? false;
+            $user->membership_status = $request->membership_status ?? false;
+
+            // Cambiar contraseña solo si se envía
+            if ($request->filled('user_pass')) {
+                $request->validate([
+                    'user_pass' => 'min:8|regex:/[A-Za-z]/|regex:/[0-9]/|regex:/[$!%*?&-.]/',
+                ]);
+                $user->user_pass = Hash::make($request->user_pass);
+            }
+
+            $user->save();
+
+            return redirect()->route('administration.users')->with('success', 'Usuario actualizado correctamente');
+        } catch (\Exception $e) {
+            return back()->withErrors(['error' => $e->getMessage()]);
+        }
+    }
+
+    //Metodo para Eliminar usuario
+    public function deleteUser($id)
+    {
+        try {
+            $user = User::findOrFail($id);
+            $user->delete();
+
+            return redirect()->route('admin.users')->with('success', 'Usuario eliminado correctamente');
+        } catch (\Exception $e) {
+            return back()->withErrors(['error' => $e->getMessage()]);
+        }
+    }
+
     
 }
 

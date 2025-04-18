@@ -33,4 +33,22 @@ Route::middleware(['auth', \App\Http\Middleware\AdminMiddleware::class])
         Route::get('/roles', [App\Http\Controllers\RolController::class, 'showRoles'])->name('administration.roles');
         Route::get('/publication', [App\Http\Controllers\PublicationsController::class, 'showPublicationList'])->name('administration.publication');
         Route::get('/planes', [MembershipsController::class, 'showPlanesList'])->name('administration.planes');
+
+        //Rutas para ver las vistas de crear y editar
+        Route::get('/users/create', [AuthController::class, 'showCreateUserForm'])->name('Create.createUser');
+        Route::get('/users/{id}/edit', [AuthController::class, 'showEditUserForm'])->name('Edit.editUser');
+        Route::get('/roles/create', [RolController::class, 'showCreateRolForm'])->name('Create.createRol');
+        Route::get('/roles/{id}/edit', [RolController::class, 'showEditRolForm'])->name('roles.edit');
+
+        //Rutas para crear
+        Route::post('/users', [AuthController::class, 'createNewUser'])->name('admin.users.store');
+        Route::post('/roles', [RolController::class, 'store'])->name('roles.store');
+
+        //Rutas para editar
+        Route::put('/users/{id}', [AuthController::class, 'updateUser'])->name('admin.users.update');
+        Route::put('/roles/{id}', [RolController::class, 'update'])->name('roles.update');
+        
+        //Rutas para eliminar
+        Route::delete('/users/{id}', [AuthController::class, 'deleteUser'])->name('admin.users.delete');
+        Route::delete('/roles/{id}', [RolController::class, 'destroy'])->name('roles.destroy');
     });
