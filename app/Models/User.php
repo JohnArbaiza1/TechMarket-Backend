@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use App\Models\Profiles;
 
 class User extends Authenticatable
 {
@@ -67,5 +68,8 @@ class User extends Authenticatable
     {
         return $this->roles->contains('name', $roleName);
     }
-
+    public function profile()
+    {
+        return $this->hasOne(Profiles::class, 'id_user', 'id');
+    }
 }

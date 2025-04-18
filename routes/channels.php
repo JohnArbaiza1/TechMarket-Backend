@@ -9,9 +9,14 @@ Broadcast::channel('chat.{id}', function ($user, $id) {
         'canal_solicitado' => "chat.{$id}",
     ]);
 
-    $userIds = explode('-', $id); // Divide la cadena del ID del canal en un array de IDs
-    $userOneId = (int) $userIds[0];
-    $userTwoId = (int) $userIds[1];
+    // Verifica si el usuario esta en el chat
+    $chat = \App\Models\Chats::find($id);
+    if (!$chat) {
+        Log::warning('🚫 Canal no encontrado', [
+            'canal_solicitado' => "chat.{$id}",
+        ]);
+        return false;
+    }
 
-    return (int) $user->id === $userOneId || (int) $user->id === $userTwoId;
+    return $user->id === $chat->user_one_id || $user->id === $chat->user_two_id;
 });

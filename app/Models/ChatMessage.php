@@ -9,19 +9,9 @@ class ChatMessage extends Model
     protected $table = 'tbl_chat_messages';
     protected $fillable = [
         'id',
-        'id_user_one',
-        'id_user_two',
+        'id_user',
         'message',
-        'message_status'
+        'message_status',
+        'id_chat',
     ];
-
-    public function sender()
-    {
-        return $this->belongsTo(User::class, 'id_user_one');
-    }
-
-    public function receiver()
-    {
-        return $this->belongsTo(User::class, 'id_user_two');
-    }
 }
