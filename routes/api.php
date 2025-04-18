@@ -1,5 +1,6 @@
 <?php
 
+use App\Events\MessageSend;
 use App\Http\Controllers\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -7,7 +8,9 @@ use App\Http\Controllers\MembershipsController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PublicationsController;
 use App\Http\Controllers\ApplicantsControllerer;
-
+use App\Models\User;
+use App\Models\ChatMessage;
+use Illuminate\Support\Facades\Broadcast;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -38,6 +41,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/users', [AuthController::class, 'listUsers']);
     //Ruta de cerrar sesion
     Route::post('/logout', [AuthController::class, 'logout']);
+    //Ruta para obtener un usuario por su id
+    Route::get('/user/{id_user}', [AuthController::class, 'getUserById']);
 
 
     //Ruta para crear un perfil
@@ -79,6 +84,33 @@ Route::middleware('auth:sanctum')->group(function () {
     //Ruta para eliminar al solicitante por id de usuario y publicacion
     Route::delete('/applicants/user/{id_user}/publication/{id_publication}', [ApplicantsControllerer::class, 'deleteApplicantByUserPublication']);
 
+
+    Route::get('/messages/{user_id}', function($user_id, Request $request) {
+        return ChatMessage::query()->where(function ($query) use ($user_id, $request) {
+            $query->where('id_user_one', $request->user()->id)
+                ->where('id_user_two', $user_id);
+        })
+        ->orWhere(function ($query) use ($user_id, $request) {
+            $query->where('id_user_one', $user_id)
+                ->where('id_user_two', $request->user()->id);
+        })->with(['sender', 'receiver'])
+        ->orderBy('created_at', 'asc')
+        ->get();
+    });
+    Route::post('/messages/{user}', function(User $user, Request $request) {
+        $request->validate([
+            'message' => 'required|string|max:1000',
+        ]);
+        $message = ChatMessage::create([
+            'id_user_one' => $request->user()->id,
+            'id_user_two' => $user->id,
+            'message' => $request->message,
+            'message_status' => 'Enviado'
+        ]);
+
+        broadcast(new MessageSend($message));
+        return $message;
+    });
 
 });
 
