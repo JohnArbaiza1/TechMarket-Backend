@@ -15,7 +15,7 @@
             </button>
 
             <!-- Botón Agregar -->
-            <a href=""
+            <a href="{{ route('Create.createRol') }}"
                 class="bg-morado-clarisimo text-white px-4 py-2 rounded hover:bg-[#4a1f6a]">
                 Agregar
             </a>
@@ -58,12 +58,12 @@
                         </td>
                         <td class="py-3 px-4 border-b flex space-x-2">
                             <!-- Botón Editar -->
-                            <a href="" class="bg-[#5E308C] text-white px-4 py-2 rounded hover:bg-[#4a1f6a]">
+                            <a href="{{ route('roles.edit', ['id' => $rol->id]) }}" class="bg-[#5E308C] text-white px-4 py-2 rounded hover:bg-[#4a1f6a]">
                                 Editar
                             </a>
 
                             <!-- Botón Eliminar -->
-                            <form action="" method="POST" 
+                            <form action="{{ route('roles.destroy', ['id' => $rol->id]) }}" method="POST" 
                                 onsubmit="return confirm('¿Estás seguro de que deseas eliminar este rol?');">
                                 @csrf
                                 @method('DELETE')

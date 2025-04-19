@@ -15,7 +15,7 @@
             </button>
 
             <!-- Botón Agregar -->
-            <a href="#"
+            <a href="{{ route('Create.createUser') }}"
                 class="bg-morado-clarisimo text-white px-4 py-2 rounded hover:bg-[#4a1f6a]">
                 Agregar
             </a>
@@ -44,10 +44,10 @@
                         <td class="py-3 px-4 border-b">{{ $user->membership_status }}</td>
                         <td class="py-3 px-4 border-b flex space-x-2">
                             <!-- Botón Editar -->
-                            <a href="" class="bg-[#5E308C] text-white px-4 py-2 rounded hover:bg-[#4a1f6a]">Editar</a>
+                            <a href="{{ route('Edit.editUser', ['id' => $user->id]) }}" class="bg-[#5E308C] text-white px-4 py-2 rounded hover:bg-[#4a1f6a]">Editar</a>
 
                             <!-- Botón Eliminar -->
-                            <form action="" method="POST" onsubmit="return confirm('¿Estás seguro de que deseas eliminar este usuario?');">
+                            <form action="{{ route('admin.users.delete', $user->id) }}" method="POST" onsubmit="return confirm('¿Estás seguro de que deseas eliminar este usuario?');">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" 
@@ -58,5 +58,8 @@
                 @endforeach
             </tbody>
         </table>
+    </div>
+    <div class="mt-4">
+        {{ $users->withQueryString()->links() }}
     </div>
 @endsection

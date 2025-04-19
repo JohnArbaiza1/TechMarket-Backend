@@ -32,13 +32,9 @@ class MessageSend implements ShouldBroadcastNow
      */
     public function broadcastOn(): array
     {
-       
-        $userOneId = max($this->message->id_user_one, $this->message->id_user_two);
-        $userTwoId = min($this->message->id_user_one, $this->message->id_user_two);
-        $channelName = 'chat.' . $userOneId . '-' . $userTwoId;
+        $channelName = 'chat.' .$this->message->id_chat;
         Log::info('Llegando al broadcastOn', [
-            'id_user_one' => $this->message->id_user_one,
-            'id_user_two' => $this->message->id_user_two,
+            'id chat' => $this->message->id_chat,
             'canal' => $channelName,
         ]);
         
