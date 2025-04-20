@@ -29,34 +29,41 @@
                         <span class="opciones">Home</span>
                     </a>
                 </li>
-                <li>
-                    <a href="{{route('administration.users')}}" class="flex items-center space-x-2 py-2 px-4 hover:bg-morado-claro rounded-md" onclick="messageDashboard('usuarios')">
-                        <i class="fa-solid fa-users icon"></i>
-                        <span class="opciones">Usuarios</span>
-                    </a>
-                </li>
+
+                @if(auth()->user()->hasRole('admin'))
+                    <li>
+                        <a href="{{route('administration.users')}}" class="flex items-center space-x-2 py-2 px-4 hover:bg-morado-claro rounded-md" onclick="messageDashboard('usuarios')">
+                            <i class="fa-solid fa-users icon"></i>
+                            <span class="opciones">Usuarios</span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="{{route('administration.roles')}}" class="flex items-center space-x-2 py-2 px-4 hover:bg-morado-claro rounded-md" onclick="messageDashboard('rol')">
+                            <i class="fa-solid fa-sitemap icon"></i>
+                            <span class="opciones">Roles</span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="{{route('administration.planes')}}" class="flex items-center space-x-2 py-2 px-4 hover:bg-morado-claro rounded-md" onclick="messageDashboard('planes')">
+                            <i class="fa-solid fa-money-check-dollar icon"></i>
+                            <span class="opciones">Planes</span>
+                        </a>
+                    </li>
+                @endif
+
                 <li>
                     <a href="{{route('administration.profile')}}" class="flex items-center space-x-2 py-2 px-4 hover:bg-morado-claro rounded-md" onclick="messageDashboard('perfiles')">
                         <i class="fa-solid fa-id-badge icon"></i>
                         <span class="opciones">Perfiles</span>
                     </a>
                 </li>
-                <li>
-                    <a href="{{route('administration.roles')}}" class="flex items-center space-x-2 py-2 px-4 hover:bg-morado-claro rounded-md" onclick="messageDashboard('rol')">
-                        <i class="fa-solid fa-sitemap icon"></i>
-                        <span class="opciones">Roles</span>
-                    </a>
-                </li>
+
                 <li>
                     <a href="{{route('administration.publication')}}" class="flex items-center space-x-2 py-2 px-4 hover:bg-morado-claro rounded-md" onclick="messageDashboard('publicaciones')">
                         <i class="fa-solid fa-share icon"></i>
                         <span class="opciones">Publicaciones</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="{{route('administration.planes')}}" class="flex items-center space-x-2 py-2 px-4 hover:bg-morado-claro rounded-md" onclick="messageDashboard('planes')">
-                        <i class="fa-solid fa-money-check-dollar icon"></i>
-                        <span class="opciones">Planes</span>
                     </a>
                 </li>
                 <li>
@@ -83,7 +90,7 @@
                 <div class="ml-auto relative">
                     <button onclick="toggleDropdown()" class="flex items-center space-x-2 hover:text-blue-600 focus:outline-none">
                         <i class="fa-solid fa-user"></i>
-                        <span>Admin</span>
+                            <span>{{ auth()->user()->user_name }}</span>
                         <i class="fa-solid fa-chevron-down text-sm"></i>
                     </button>
 

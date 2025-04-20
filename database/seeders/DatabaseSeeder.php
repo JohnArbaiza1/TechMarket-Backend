@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
             MembershipsTableSeeder::class,
             RoleSeeder::class,
             UsersTableSeeder::class,
+            ProfileSeeder::class,
         ]);
         
     }

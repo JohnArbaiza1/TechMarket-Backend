@@ -16,7 +16,7 @@
 
             <!-- Botón Agregar -->
             <a href="{{ route('Create.createRol') }}"
-                class="bg-morado-clarisimo text-white px-4 py-2 rounded hover:bg-[#4a1f6a]">
+                class="bg-morado-clarisimo text-white px-4 py-2 rounded hover:bg-[#4a1f6a]" onclick="messageDashboard('otras')">
                 Agregar
             </a>
         </form>
@@ -58,7 +58,7 @@
                         </td>
                         <td class="py-3 px-4 border-b flex space-x-2">
                             <!-- Botón Editar -->
-                            <a href="{{ route('roles.edit', ['id' => $rol->id]) }}" class="bg-[#5E308C] text-white px-4 py-2 rounded hover:bg-[#4a1f6a]">
+                            <a href="{{ route('roles.edit', ['id' => $rol->id]) }}" class="bg-[#5E308C] text-white px-4 py-2 rounded hover:bg-[#4a1f6a]" onclick="messageDashboard('otras')">
                                 Editar
                             </a>
 
