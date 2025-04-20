@@ -15,8 +15,8 @@
             </button>
 
             <!-- Botón Agregar -->
-            <a href="#"
-                class="bg-morado-clarisimo text-white px-4 py-2 rounded hover:bg-[#4a1f6a]">
+            <a href="{{ route('Create.createPublication') }}"
+                class="bg-morado-clarisimo text-white px-4 py-2 rounded hover:bg-[#4a1f6a]" onclick="messageDashboard('otras')">
                 Agregar
             </a>
         </form>
@@ -51,10 +51,10 @@
                     <td class="py-3 px-4 border-b">
                         <div class="flex flex-col space-y-2">
                             <!-- Botón Editar -->
-                            <a href="" class="bg-[#5E308C] text-white px-4 py-2 rounded hover:bg-[#4a1f6a]">Editar</a>
+                            <a href="{{ route('Edit.editPublication', $item->id) }}" class="bg-[#5E308C] text-white px-4 py-2 rounded hover:bg-[#4a1f6a]" onclick="messageDashboard('otras')">Editar</a>
                     
                             <!-- Botón Eliminar -->
-                            <form action="" method="POST" onsubmit="return confirm('¿Estás seguro de que deseas eliminar este usuario?');">
+                            <form action="{{ route('admin.publication.delete', $item->id) }}" method="POST" onsubmit="return confirm('¿Estás seguro de que deseas eliminar este usuario?');">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" 
@@ -67,4 +67,8 @@
             </tbody>
         </table>
     </div>
+    <div class="mt-4">
+        {{ $publication->withQueryString()->links() }}
+    </div>
+    
 @endsection

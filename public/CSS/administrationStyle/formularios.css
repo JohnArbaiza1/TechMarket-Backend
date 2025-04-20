@@ -61,4 +61,18 @@
 textarea{
     width: 100%;
     border: 1px solid #ccc;
+    padding: 2px;
+}
+
+.form-row {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 15px;
+    margin-top: 14px;
+}
+
+.form-group {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
 }

@@ -25,6 +25,9 @@ function messageDashboard(opcion){
         case 'cerrar sesion':
             mensaje = '';
             break;
+        case 'otras':
+            mensaje = '.';
+            break;
         default:
             mensaje = 'Bienvenido'; // Mensaje por defecto si la opción no coincide con ningúna
     }

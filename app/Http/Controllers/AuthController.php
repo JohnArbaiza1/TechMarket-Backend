@@ -130,7 +130,6 @@ class AuthController extends Controller
         }
     }
     /********************* Metodos para el Panel de Administración *********************/
-
     // Mostrar el formulario de login
     public function showLoginForm()
     {
@@ -144,7 +143,6 @@ class AuthController extends Controller
 
         return view('auth.login');
     }
-
 
     //Metodo para procesar el login de administración
     public function adminLogin(Request $request){
@@ -206,10 +204,12 @@ class AuthController extends Controller
         }
     }
 
+    //Metodo para ver la vista de crear
     public function showCreateUserForm() {
         return view('Create.createUser'); 
     }
 
+    //Metodo para ver la vista de editar
     public function showEditUserForm($id) {
         $user = User::findOrFail($id);
         return view('Edit.editUser', compact('user'));

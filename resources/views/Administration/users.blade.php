@@ -16,7 +16,7 @@
 
             <!-- Botón Agregar -->
             <a href="{{ route('Create.createUser') }}"
-                class="bg-morado-clarisimo text-white px-4 py-2 rounded hover:bg-[#4a1f6a]">
+                class="bg-morado-clarisimo text-white px-4 py-2 rounded hover:bg-[#4a1f6a]" onclick="messageDashboard('otras')">
                 Agregar
             </a>
         </form>
@@ -44,7 +44,7 @@
                         <td class="py-3 px-4 border-b">{{ $user->membership_status }}</td>
                         <td class="py-3 px-4 border-b flex space-x-2">
                             <!-- Botón Editar -->
-                            <a href="{{ route('Edit.editUser', ['id' => $user->id]) }}" class="bg-[#5E308C] text-white px-4 py-2 rounded hover:bg-[#4a1f6a]">Editar</a>
+                            <a href="{{ route('Edit.editUser', ['id' => $user->id]) }}" class="bg-[#5E308C] text-white px-4 py-2 rounded hover:bg-[#4a1f6a]" onclick="messageDashboard('otras')">Editar</a>
 
                             <!-- Botón Eliminar -->
                             <form action="{{ route('admin.users.delete', $user->id) }}" method="POST" onsubmit="return confirm('¿Estás seguro de que deseas eliminar este usuario?');">
