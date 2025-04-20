@@ -104,6 +104,7 @@ Route::middleware('auth:sanctum')->group(function () {
                 'userTwo:id,user_name', 
                 'userOne.profile:id_user,image_url', 
                 'userTwo.profile:id_user,image_url',
+                'publication:id,title',
                 'messages' => function ($query) {
                     $query->orderBy('created_at', 'asc'); 
                 },
@@ -176,6 +177,7 @@ Route::middleware('auth:sanctum')->group(function () {
             'userTwo:id,user_name', 
             'userOne.profile:id_user,image_url', 
             'userTwo.profile:id_user,image_url',
+            'publication:id,title',
             'messages' => function ($query) {
                 $query->orderBy('created_at', 'asc');
             },
