@@ -20,3 +20,20 @@ Broadcast::channel('chat.{id}', function ($user, $id) {
 
     return $user->id === $chat->user_one_id || $user->id === $chat->user_two_id;
 });
+Broadcast::channel('user.{id}', function ($user, $id) {
+    Log::info('🔌 Intento de conexión al canal privado del usuario', [
+        'usuario_autenticado_id' => $user->id,
+        'canal_solicitado' => "user.{$id}",
+    ]);
+
+    // Permitir acceso solo si el usuario autenticado es el mismo que el ID del canal
+    $isAuthorized = (int) $user->id === (int) $id;
+    if (!$isAuthorized) {
+        Log::warning('🚫 Acceso denegado al canal del usuario', [
+            'usuario_autenticado_id' => $user->id,
+            'canal_solicitado' => "user.{$id}",
+        ]);
+    }
+
+    return $isAuthorized;
+});

@@ -1,5 +1,6 @@
 <?php
 
+use App\Events\ChatCreated;
 use App\Events\MessageSend;
 use App\Http\Controllers\AuthController;
 use Illuminate\Http\Request;
@@ -134,6 +135,7 @@ Route::middleware('auth:sanctum')->group(function () {
                 'message_status' => false,
                 'id_chat' => $chat->id,
             ]);
+            broadcast(new ChatCreated($chat));
         }else{
             $message = ChatMessage::create([
                 'id_user' => $request->user()->id,
@@ -167,6 +169,23 @@ Route::middleware('auth:sanctum')->group(function () {
             return response()->json(['error' => 'Error al cambiar el estado del mensaje: ' . $e->getMessage()], 500);
         }
         
+    });
+    Route::get('/chats/{id}', function ($id) {
+        $chat = \App\Models\Chats::with([
+            'userOne:id,user_name', 
+            'userTwo:id,user_name', 
+            'userOne.profile:id_user,image_url', 
+            'userTwo.profile:id_user,image_url',
+            'messages' => function ($query) {
+                $query->orderBy('created_at', 'asc');
+            },
+        ])->find($id);
+
+        if (!$chat) {
+            return response()->json(['error' => 'Chat no encontrado'], 404);
+        }
+
+        return $chat;
     });
 });
 
