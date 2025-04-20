@@ -66,6 +66,14 @@
                         <span class="opciones">Publicaciones</span>
                     </a>
                 </li>
+
+                <li>
+                    <a href="http://localhost:5173/principal" class="flex items-center space-x-2 py-2 px-4 hover:bg-morado-claro rounded-md">
+                        <i class="fa-solid fa-desktop icon"></i>
+                        <span class="opciones">Plataforma</span>
+                    </a>
+                </li>
+
                 <li>
                     <form method="POST" action="{{ route('admin.logout') }}">
                         @csrf
@@ -89,14 +97,18 @@
 
                 <div class="ml-auto relative">
                     <button onclick="toggleDropdown()" class="flex items-center space-x-2 hover:text-blue-600 focus:outline-none">
-                        <i class="fa-solid fa-user"></i>
+                        <img 
+                            src="{{ auth()->user()->profile->image_url ?? asset('images/default-profile.png') }}" 
+                            alt="Perfil" 
+                            class="w-8 h-8 rounded-full object-cover"
+                        >
                             <span>{{ auth()->user()->user_name }}</span>
                         <i class="fa-solid fa-chevron-down text-sm"></i>
                     </button>
 
                     <!-- Dropdown -->
                     <div id="dropdownMenu" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg border z-50 transition-all duration-150 ease-in-out">
-                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Perfil</a>
+                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Ajustes</a>
                         <div class="border-t my-1"></div>
                         <form method="POST" action="{{ route('admin.logout') }}">
                             @csrf
@@ -116,10 +128,8 @@
                         @php $mensaje = ''; @endphp
                         @if(!empty($mensaje))
                             <h1 id="mensaje">{{ $mensaje }}</h1>
-                            <hr>
                         @else
-                            <h1 id="mensaje" class="text-2xl font-semibold mb-4">Bienvenido</h1>
-                            <hr>
+                            <h1 id="mensaje" class="text-2xl font-semibold mb-4">Hola {{ auth()->user()->user_name }} ¡Qué bueno verte de nuevo!</h1>
                         @endif
                         <div id="content">
                             @yield('content')

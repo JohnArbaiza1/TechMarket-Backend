@@ -97,7 +97,7 @@ class PublicationsController extends Controller
                 $maxPublications = 1;
                 break;
             case 2: // Plan Pro
-                $maxPublications = 10;
+                $maxPublications = 3;
                 break;
             case 3: // Plan Enterprise Inicial
                 $maxPublications = 1;
