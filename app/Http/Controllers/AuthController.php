@@ -14,7 +14,28 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         try {
-            // //validando para los datos que viene del frotend
+
+            //Verificamos manualmente si el usuario ya existe
+            $existingUser = User::where('email', $request->email)
+                ->orWhere('user_name', $request->user_name)
+                ->first();
+
+            if ($existingUser) {
+                $errorMessage = [];
+                if ($existingUser->email === $request->email) {
+                    $errorMessage['email'] = ['Este correo electrónico ya está registrado.'];
+                }
+                if ($existingUser->user_name === $request->user_name) {
+                    $errorMessage['user_name'] = ['Este nombre de usuario ya está en uso.'];
+                }
+                    
+                return response()->json([
+                    'message' => 'Error de validación',
+                    'errors' => $errorMessage
+                ], 422); // Código de error de validación
+            }           
+
+            //validando para los datos que viene del frotend
             $request->validate([
                 'user_name' => 'required|max:255',
                 'email' => 'required|email|unique:tbl_users,email',
@@ -31,7 +52,7 @@ class AuthController extends Controller
                 'id_membership'=> $request->id_membership,
                 'membership_status' => false,
                 'user_rating' => 0,
-                'remenber_token' => Str::random(60), // Token aleatorio
+                'remember_token' => Str::random(60),// Token aleatorio
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
