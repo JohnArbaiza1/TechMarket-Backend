@@ -72,4 +72,8 @@ class User extends Authenticatable
     {
         return $this->hasOne(Profiles::class, 'id_user', 'id');
     }
+    public function membership()
+    {
+        return $this->belongsTo(Memberships::class, 'id_membership', 'id');
+    }
 }

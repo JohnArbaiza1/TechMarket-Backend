@@ -5,6 +5,8 @@ use App\Models\Applicants;
 use App\Models\Profiles;
 use App\Models\Publications;
 use App\Models\User;
+use App\Models\Memberships;
+
 
 use Illuminate\Http\Request;
 
@@ -18,18 +20,39 @@ class ApplicantsControllerer extends Controller
                 'id_user' => 'required|integer',
             ]);
 
+
+            $user = User::with('membership')->find($request->id_user);
+
+
+            if (!$user) {
+                return response()->json(['error' => 'Usuario no encontrado'], 404);
+            }
+
+            // Se verifica la membresía del usuario
+            if (!$user->membership->unlimited_applications) {
+                // Se cuenta cuántas veces el usuario ha aplicado
+                $applicationsCount = Applicants::where('id_user', $user->id)->count();
+
+                if ($applicationsCount >= 4) {
+                    return response()->json(['error' => 'El usuario ha alcanzado el límite de aplicaciones permitidas para su membresía'], 203);
+                }
+            }
+
             // Verificar si la publicación existe
             $publication = Publications::find($request->id_publication);
             if (!$publication) {
                 return response()->json(['error' => 'Publicación no encontrada'], 404);
             }
-            // Verifica si el usuario ya esta registrado con la publicacion
+
+            // Verificar si el usuario ya está registrado con la publicación
             $applicant = Applicants::where('id_publication', $request->id_publication)
                 ->where('id_user', $request->id_user)
                 ->first();
             if ($applicant) {
                 return response()->json(['error' => 'El usuario ya está registrado para esta publicación'], 400);
             }
+
+            // Crear el registro de aplicación
             $applicant = Applicants::create($request->all());
             return response()->json($applicant, 201);
         } catch (\Exception $e) {
