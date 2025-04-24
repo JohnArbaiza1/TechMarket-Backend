@@ -138,11 +138,13 @@ class AuthController extends Controller
         }
     }
 
-    // Metodo para mostrar todos los usuarios registrados
+    // Metodo para mostrar todos los usuarios registrados con sus perfiles
     public function listUsers()
     {
         try {
-            $users = User::all();
+            // Carga los usuarios con sus perfiles relacionados usando eager loading
+            $users = User::with('profile')->get();
+            
             return response()->json($users, 200);
         } catch (\Exception $e) {
             return response()->json([
@@ -150,6 +152,7 @@ class AuthController extends Controller
             ], 500);
         }
     }
+
     /********************* Metodos para el Panel de Administración *********************/
     // Mostrar el formulario de login
     public function showLoginForm()
