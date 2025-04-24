@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use App\Models\Profiles;
 
 class User extends Authenticatable
 {
@@ -53,5 +54,22 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'user_pass' => 'hashed',
         ];
+    }
+
+    //Parte donde se trabaja la realción 
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class, 'tbl_role_user', 'user_id', 'role_id');
+    }
+
+        
+    //Verifica si el usuario tiene un rol específico.
+    public function hasRole(string $roleName): bool
+    {
+        return $this->roles->contains('name', $roleName);
+    }
+    public function profile()
+    {
+        return $this->hasOne(Profiles::class, 'id_user', 'id');
     }
 }

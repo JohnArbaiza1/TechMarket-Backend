@@ -97,7 +97,7 @@ class PublicationsController extends Controller
                 $maxPublications = 1;
                 break;
             case 2: // Plan Pro
-                $maxPublications = 10;
+                $maxPublications = 3;
                 break;
             case 3: // Plan Enterprise Inicial
                 $maxPublications = 1;
@@ -216,4 +216,108 @@ class PublicationsController extends Controller
         }
     }
 
+    /********************* Metodos para el Panel de Administración *********************/
+    //Metodo para listar las publicaciones desde el backend
+    public function showPublicationList(Request $request)
+    {
+        try {
+            $search = $request->input('search');
+    
+            // Creamos una query base
+            $query = Publications::query();
+    
+            // Si hay búsqueda, aplicamos el filtro
+            if ($search) {
+                $query->where('title', 'like', "%$search%")
+                    ->orWhere('id', 'like', "%$search%");
+            }
+    
+            // Ejecutamos la consulta
+            $publications = $query->paginate(5)->withQueryString();
+    
+            // Pasamos la data a la vista
+            return view('administration.publication', [
+                'publication' => $publications,
+                'search' => $search,
+            ]);
+            
+        } catch (\Throwable $th) {
+            return response()->json(['error' => $th->getMessage()], 500);
+        }
+    }
+
+    //Metodo para ver la vista de crear publicacion
+    public function showCreatePublicationForm()
+    {
+        $users = User::all();
+        return view('Create.createPublication', compact('users'));
+    }
+
+    //Metodo para crear una publicacicón desde el panel
+    public function createPublicationAdmin(Request $request)
+    {
+        try {
+            $request->validate([
+                'title' => 'required|string|max:255',
+                'publication_description' => 'nullable|string|max:1000',
+                'publication_image' => 'nullable|string|max:2048',
+                'id_user' => 'required|integer|exists:tbl_users,id',
+                'quota' => 'required|integer|min:1',
+                'publication_status' => 'required|string',
+                'publication_rating' => 'nullable|numeric|min:0|max:5',
+                'tags' => 'nullable|string|max:255',
+            ]);
+
+            Publications::create($request->all());
+
+            return redirect()->route('administration.publication')->with('success', 'Publicación creada correctamente');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Error al crear la publicación: ' . $e->getMessage());
+        }
+    }
+
+    //Metodo para ver la vista de editar publicacion
+    public function showEditPublicationForm($id)
+    {
+        $publication = Publications::findOrFail($id);
+        $users = User::all(); // por si necesitas editar el autor
+        return view('Edit.editPublication', compact('publication', 'users'));
+    }
+
+    //Metodo para actualizar
+    public function updatePublicationAdmin(Request $request, $id)
+    {
+        try {
+            $request->validate([
+                'title' => 'required|string|max:255',
+                'publication_description' => 'nullable|string|max:1000',
+                'publication_image' => 'nullable|string|max:2048',
+                'id_user' => 'required|integer|exists:tbl_users,id',
+                'quota' => 'required|integer|min:1',
+                'publication_status' => 'required|string',
+                'publication_rating' => 'nullable|numeric|min:0|max:5',
+                'tags' => 'nullable|string|max:255',
+            ]);
+
+            $publication = Publications::findOrFail($id);
+            $publication->update($request->all());
+
+            return redirect()->route('administration.publication')->with('success', 'Publicación actualizada correctamente');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Error al actualizar la publicación: ' . $e->getMessage());
+        }
+    }
+
+    //Metodo para eliminar
+    public function deletePublicationAdmin($id)
+    {
+        try {
+            $publication = Publications::findOrFail($id);
+            $publication->delete();
+
+            return redirect()->route('administration.publication')->with('success', 'Publicación eliminada correctamente');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Error al eliminar la publicación: ' . $e->getMessage());
+        }
+    }
 }

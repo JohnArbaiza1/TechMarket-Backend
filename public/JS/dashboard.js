@@ -13,6 +13,9 @@ function messageDashboard(opcion){
         case 'perfiles':
             mensaje = 'Datos de los Perfiles de Usuarios';
             break;
+        case 'rol':
+            mensaje = 'Roles Creados y Asignados';
+            break;
         case 'publicaciones':
             mensaje = 'Datos de Publicaciones';
             break;
@@ -21,6 +24,9 @@ function messageDashboard(opcion){
             break;
         case 'cerrar sesion':
             mensaje = '';
+            break;
+        case 'otras':
+            mensaje = '.';
             break;
         default:
             mensaje = 'Bienvenido'; // Mensaje por defecto si la opción no coincide con ningúna

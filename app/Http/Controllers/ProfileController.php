@@ -160,4 +160,136 @@ class ProfileController extends Controller
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
+
+    /********************* Metodos para el Panel de Administración *********************/
+    //Metodo  para cargar los datos del perfil desde el backend
+    public function showProfileList(Request $request)
+    {
+        try {
+            $query = Profiles::query();
+    
+            // Se envía un término de búsqueda
+            if ($request->has('search') && !empty($request->search)) {
+                $search = $request->search;
+                $query->where(function ($q) use ($search) {
+                    $q->where('first_name', 'ILIKE', "%$search%")
+                    ->orWhere('last_name', 'ILIKE', "%$search%")
+                    ->orWhere('skills', 'ILIKE', "%$search%")
+                    ->orWhere('work_experience', 'ILIKE', "%$search%");
+                });
+            }
+    
+            // Paginamos
+            $profile = $query->paginate(5)->withQueryString();
+    
+            return view('administration.profile', compact('profile'));
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+
+    //Metodo para ver la vista de crear profile
+    public function showCreateProfileForm() {
+        $users = User::all();
+        return view('Create.createProfile', compact('users')); 
+    }
+
+    //Metodo para crear un perfil desde el panel
+    public function createNewProfile(Request $request){
+        try {
+            $validated = $request->validate([
+                'first_name' => 'nullable|string|max:255',
+                'last_name' => 'nullable|string|max:255',
+                'phone_number' => 'nullable|string|max:9',
+                'address' => 'nullable|string|max:255',
+                'description' => 'nullable|string|max:1000',
+                'image_url' => 'nullable|string|max:255',
+                'social_media_links' => 'nullable|string|max:1000',
+                'education' => 'nullable|string|max:1000',
+                'work_experience' => 'nullable|string|max:1000',
+                'skills' => 'nullable|string|max:1000',
+                'id_user' => 'required|exists:tbl_users,id',
+            ]);
+    
+            // Validación del teléfono
+            if (!empty($validated['phone_number'])) {
+                $phone = preg_replace('/[^0-9]/', '', $validated['phone_number']);
+                if (strlen($phone) != 8) {
+                    return back()->with('error', 'El número de teléfono debe tener 8 dígitos.');
+                }
+                $validated['phone_number'] = substr($phone, 0, 4) . '-' . substr($phone, 4);
+            }
+    
+            // Verificamos si ya tiene un perfil ese usuario
+            if (Profiles::where('id_user', $validated['id_user'])->exists()) {
+                return back()->with('error', 'Este usuario ya tiene un perfil.');
+            }
+    
+            Profiles::create($validated);
+    
+            return redirect()->route('administration.profile')->with('success', 'Perfil creado correctamente');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Error al crear el perfil: ' . $e->getMessage());
+        }
+    }
+
+    //Metodo para mostrar formulario de edición del perfil
+    public function showEditProfileForm($id)
+    {
+        try {
+            $profile = Profiles::findOrFail($id);
+            $users = User::all();
+            return view('Edit.editProfile', compact('profile', 'users'));
+        } catch (\Exception $e) {
+            return back()->with('error', 'Perfil no encontrado: ' . $e->getMessage());
+        }
+    }
+
+    // Método para actualizar un perfil existente
+    public function updateAdminProfile(Request $request, $id){
+
+        try {
+            $validated = $request->validate([
+                'first_name' => 'nullable|string|max:255',
+                'last_name' => 'nullable|string|max:255',
+                'phone_number' => 'nullable|string|max:9',
+                'address' => 'nullable|string|max:255',
+                'description' => 'nullable|string|max:1000',
+                'image_url' => 'nullable|string|max:255',
+                'social_media_links' => 'nullable|string|max:1000',
+                'education' => 'nullable|string|max:1000',
+                'work_experience' => 'nullable|string|max:1000',
+                'skills' => 'nullable|string|max:1000',
+                'id_user' => 'required|exists:tbl_users,id',
+            ]);
+    
+            if (!empty($validated['phone_number'])) {
+                $phone = preg_replace('/[^0-9]/', '', $validated['phone_number']);
+                if (strlen($phone) != 8) {
+                    return back()->with('error', 'El número de teléfono debe tener 8 dígitos.');
+                }
+                $validated['phone_number'] = substr($phone, 0, 4) . '-' . substr($phone, 4);
+            }
+    
+            $profile = Profiles::findOrFail($id);
+            $profile->update($validated);
+    
+            return redirect()->route('administration.profile')->with('success', 'Perfil actualizado correctamente');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Error al actualizar el perfil: ' . $e->getMessage());
+        }
+    }
+
+    // Método para eliminar un perfil
+    public function deleteProfile($id)
+    {
+        try {
+            $profile = Profiles::findOrFail($id);
+            $profile->delete();
+
+            return redirect()->route('administration.profile')->with('success', 'Perfil eliminado correctamente');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Error al eliminar el perfil: ' . $e->getMessage());
+        }
+    }
 }

@@ -59,7 +59,7 @@ class MembershipsController extends Controller
 
             $membership->update($request->all());
 
-            return response()->json($membership, 200);
+            return redirect()->route('administration.planes')->with('success', 'Plan editado correctamente');
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }
@@ -72,9 +72,18 @@ class MembershipsController extends Controller
             if (!$membership) {
                 return response()->json(['error' => 'Membresía no encontrada'], 404);
             }
+            
+            // Verificar si hay usuarios asociados a esta membresía
+            $usersWithMembership = \App\Models\User::where('id_membership', $id_membership)->exists();
+
+            if ($usersWithMembership) {
+                return back()->with('error', 'No puedes eliminar esta membresía porque hay usuarios asociados a ella.');
+            }
+
+            // Eliminar la membresía si no está siendo utilizada
             $membership->delete();
 
-            return response()->json(['message' => 'Membresía eliminada con éxito'], 200);
+            return redirect()->route('administration.planes')->with('success', 'Plan eliminado correctamente');
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }
@@ -91,4 +100,29 @@ class MembershipsController extends Controller
         }
     }
 
+    /********************* Metodos para el Panel de Administración *********************/
+    //Metodo para listar los planes desde el backend
+    public function showPlanesList(Request $request)
+    {
+        try {
+            $membership = Memberships::all();
+            return view('administration.planes', [
+                'planes' => $membership
+            ]);
+        } catch (\Exception $e) {
+            // Capturamos cualquier excepción y la mostramos
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+
+    //Método para ver la vista de edición
+    public function showEditMembership($id)
+    {
+        try {
+            $membership = Memberships::findOrFail($id);
+            return view('Edit.editPlanes', compact('membership'));
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Membresía no encontrada.');
+        }
+    }
 }

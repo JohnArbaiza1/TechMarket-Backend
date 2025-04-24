@@ -13,10 +13,11 @@ return new class extends Migration
     {
         Schema::create('tbl_chats', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('id_user_one');
-            $table->foreign('id_user_one')->references('id')->on('tbl_users');
-            $table->unsignedBigInteger('id_user_two');
-            $table->foreign('id_user_two')->references('id')->on('tbl_users');
+            $table->unsignedBigInteger('user_one_id');
+            $table->unsignedBigInteger('user_two_id');
+            $table->foreign('user_one_id')->references('id')->on('tbl_users');
+            $table->foreign('user_two_id')->references('id')->on('tbl_users');
+            $table->unsignedBigInteger('id_publication')->nullable();
             $table->timestamps();
         });
     }
@@ -26,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('chats');
+        Schema::dropIfExists('tbl_chats');
     }
 };
