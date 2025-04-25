@@ -13,6 +13,7 @@ use App\Http\Controllers\ChatController;
 use App\Models\User;
 use App\Models\ChatMessage;
 use App\Models\Chats;
+use Illuminate\Container\Attributes\Auth;
 use Illuminate\Support\Facades\Broadcast;
 
 Route::get('/user', function (Request $request) {
@@ -189,5 +190,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
         return $chat;
     });
+
+    Route::post('/membershipsUpdate', [AuthController::class, 'updateMembership']);
 });
 

@@ -330,5 +330,24 @@ class AuthController extends Controller
         }
     }
 
+    //Metodo para actualizar la membresía del usuario
+    public function updateMembership(Request $request)
+    {
+        try {
+            $request->validate([
+                'id_membership' => 'required',
+            ]);
+
+            $user = User::findOrFail($request->user()->id);
+            $user->id_membership = $request->id_membership;
+            $user->membership_status = true; // Cambia el estado de la membresía a activa
+            $user->save();
+
+            return response()->json(['message' => 'Membresía actualizada correctamente'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+
 }
 

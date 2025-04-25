@@ -29,7 +29,7 @@ class ApplicantsControllerer extends Controller
             }
 
             // Se verifica la membresía del usuario
-            if (!$user->membership->unlimited_applications) {
+            if (!$user->membership->unlimited_applications || !$user->membership_status) {
                 // Se cuenta cuántas veces el usuario ha aplicado
                 $applicationsCount = Applicants::where('id_user', $user->id)->count();
 
