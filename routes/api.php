@@ -87,7 +87,12 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/applicant/{id_applicant}', [ApplicantsControllerer::class, 'deleteApplicant']);
     //Ruta para eliminar al solicitante por id de usuario y publicacion
     Route::delete('/applicants/user/{id_user}/publication/{id_publication}', [ApplicantsControllerer::class, 'deleteApplicantByUserPublication']);
-    
+    //Ruta para cambiar el estado de un solicitante
+    Route::put('/applicant', [ApplicantsControllerer::class, 'changeApplicantStatus']);
+    //Ruta para obtener los solicitantes de una publicacion por su estado
+    Route::get('/applicant/{id_publicacion}/accepted', [ApplicantsControllerer::class, 'getApplicantsByPublicationStatus']);
+
+
     //Ruta para crear un chat
     Route::post('/chat', [ChatController::class, 'createChat']);
     //Ruta para obtener todos los chats del usuario logueado

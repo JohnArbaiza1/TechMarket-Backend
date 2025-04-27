@@ -151,5 +151,92 @@ class ApplicantsControllerer extends Controller
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
+    // Cambiar el estado de la solicitud
+    public function changeApplicantStatus(Request $request)
+    {
+        try {
+            $request->validate([
+                'status' => 'required|boolean',
+            ]);
+            $publication = Publications::find($request->id_publication);
+                if (!$publication) {
+                    return response()->json(['error' => 'Publicación no encontrada'], 404);
+                }
+            if($request->status == true){  
+                if($publication->quota == 0){
+                    return response()->json(['error' => 'No se puede cambiar el estado de la solicitud, la publicación no tiene cupo'], 205);
+                }else{
+                    $publication->quota = $publication->quota - 1;
+                    $publication->save();
+                    $applicant = Applicants::where('id_publication', $request->id_publication)
+                    ->where('id_user', $request->id_user)
+                    ->first();
+
+                    if (!$applicant) {
+                        return response()->json(['error' => 'Solicitante no encontrado'], 404);
+                    }
+                    
+
+                    $applicant->is_selected = $request->status;
+                    $applicant->save();
+
+                    return response()->json(['message' => 'Estado de la solicitud actualizado con éxito'], 200);
+                }
+            }else{
+                    $publication->quota = $publication->quota + 1;
+                    $publication->save();
+                    $applicant = Applicants::where('id_publication', $request->id_publication)
+                    ->where('id_user', $request->id_user)
+                    ->first();
+
+                    if (!$applicant) {
+                        return response()->json(['error' => 'Solicitante no encontrado'], 404);
+                    }
+                    
+
+                    $applicant->is_selected = $request->status;
+                    $applicant->save();
+
+                    return response()->json(['message' => 'Estado de la solicitud actualizado con éxito'], 200);
+            }
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+
+    //Para obtener los usuarios que han aplicado a una publicacion y su estado es true
+    public function getApplicantsByPublicationStatus($id_publication)
+    {
+        try {
+            $applicants = Applicants::where('id_publication', $id_publication)
+                ->where('is_selected', true)
+                ->get();
+
+            if ($applicants->isEmpty()) {
+                return response()->json([], 200);
+            }
+            foreach ($applicants as $applicant) {
+                $user = User::select('id', 'user_name', 'email')->find($applicant->id_user);
+                if ($user) {
+                    $applicant->users = $user;
+                    //obtener informacion del perfil
+                    $profile = Profiles::select('id','first_name', 'last_name', 'image_url')->where('id_user', $applicant->id_user)->first();
+                    if ($profile) {
+                        $applicant->users->profile = $profile;
+                    } else {
+                        return response()->json(['error' => 'Perfil del usuario no encontrado'], 200);
+                    }
+                } else {
+                    return response()->json(['error' => 'Usuario no encontrado'], 200);
+                }
+            }
+            // Devolver la lista de solicitantes con detalles de usuario
+            return response()->json($applicants, 200);
+
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
 
 }
+
