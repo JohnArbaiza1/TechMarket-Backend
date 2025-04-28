@@ -46,39 +46,50 @@ class FollowController extends Controller
     // Método para obtener los seguidores del usuario autenticado
     public function myFollowers(Request $request)
     {
-        // Obtiene el usuario autenticado
-        $user = Auth::user();
-
-        // Si hay búsqueda por nombre de usuario
-        $search = $request->input('search');
-
-        $followers = $user->followers()
-            ->with('profile')
-            ->when($search, function ($query, $search) {
-                $query->where('user_name', 'LIKE', '%' . $search . '%');
-            })
-            ->get();
-
-        return response()->json($followers);
+        try {
+            // Obtiene el usuario autenticado
+            $user = Auth::user();
+            $search = $request->input('search');
+    
+            $followers = $user->followers()
+                ->with('profile') // eager loading
+                ->when($search, function ($query, $search) {
+                    $query->where('user_name', 'LIKE', '%' . $search . '%');
+                })
+                ->orderBy('user_name')
+                ->get();
+    
+            return response()->json($followers, 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => 'Error al obtener seguidores',
+                'details' => $e->getMessage()
+            ], 500);
+        }
     }
 
     // Método para obtener a quiénes sigue el usuario autenticado
     public function myFollowing(Request $request)
     {
-        // Obtiene el usuario autenticado
-        $user = Auth::user();
-
-        // Si hay búsqueda por nombre de usuario
-        $search = $request->input('search');
-
-        $following = $user->following()
-            ->with('profile')
-            ->when($search, function ($query, $search) {
-                $query->where('user_name', 'LIKE', '%' . $search . '%');
-            })
-            ->get();
-
-        return response()->json($following);
+        try {
+            // Obtiene el usuario autenticado
+            $user = Auth::user();
+            $search = $request->input('search');
+    
+            $following = $user->following()
+                ->with('profile') // eager loading
+                ->when($search, function ($query, $search) {
+                    $query->where('user_name', 'LIKE', '%' . $search . '%');
+                })
+                ->orderBy('user_name')
+                ->get();
+    
+            return response()->json($following, 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => 'Error al obtener seguidos',
+                'details' => $e->getMessage()
+            ], 500);
+        }
     }
-
 }
