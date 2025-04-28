@@ -15,6 +15,7 @@ use App\Models\ChatMessage;
 use App\Models\Chats;
 use Illuminate\Container\Attributes\Auth;
 use Illuminate\Support\Facades\Broadcast;
+use App\Http\Controllers\FollowController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -197,5 +198,15 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
     Route::post('/membershipsUpdate', [AuthController::class, 'updateMembership']);
+
+    //************************** Rutas para los seguidores ************************************
+    //Ruta para seguir usuario
+    Route::post('/follow/{id}', [FollowController::class, 'follow'])->name('follow');
+    //Ruta para dejar de seguir
+    Route::post('/unfollow/{id}', [FollowController::class, 'unfollow'])->name('unfollow');
+    //Ruta para obtener mis seguidores
+    Route::get('/followers', [FollowController::class, 'myFollowers'])->name('followers');
+    //Ruta para obtener a qienes sigo
+    Route::get('/following', [FollowController::class, 'myFollowing'])->name('following');
 });
 
