@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use App\Models\Publications;
 use App\Models\User;
+use App\Models\Memberships;
 
 use Illuminate\Http\Request;
 
@@ -37,34 +38,18 @@ class PublicationsController extends Controller
             ->where('publication_status', '!=', 'deleted')
             ->count();
 
-         // Verifica el límite de publicaciones basado en el plan del usuario
-        switch ($membershipId) {
-            case 1: // Plan Inicial
-                $maxPublications = 1;
-                break;
-            case 2: // Plan Pro
-                $maxPublications = 10;
-                break;
-            case 3: // Plan Enterprise Inicial
-                $maxPublications = 100;
-                break;
-            case 4: // Plan Pro Enterprise
-                $maxPublications = 5;
-                break;
-            case 5: // Plan Todo en Uno
-                $maxPublications = -1; // Código para ilimitado
-                break;
-            default:
-                $maxPublications = 0;
+        //Obtenemos la membresia del usuario
+        $membership = Memberships::find($membershipId);
+        if (!$membership) {
+            return response()->json(['error' => 'Membresía no encontrada'], 404);
         }
 
 
         // Verifica si el usuario ha alcanzado el límite de publicaciones
-        if ($maxPublications != -1 && $currentPublications >= $maxPublications) {
+        if ($currentPublications >= 1 && !$membership->unlimited_publications) {
             return response()->json([
                 'error' => 'Has alcanzado el límite de publicaciones de tu plan.',
                 'current' => $currentPublications,
-                'max' => $maxPublications
             ], 400);
         }
 
