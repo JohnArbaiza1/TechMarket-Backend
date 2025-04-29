@@ -31,4 +31,8 @@ class Chats extends Model
     {
         return $this->belongsTo(Publications::class, 'id_publication', 'id');
     }
+    public function application()
+    {
+        return $this->belongsTo(Applicants::class, 'id_user', 'id');
+    }
 }

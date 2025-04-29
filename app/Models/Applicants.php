@@ -11,6 +11,7 @@ class Applicants extends Model
         'id',
         'id_publication',
         'id_user',
+        'id_selected',
         'created_at',
         'updated_at',
     ];
