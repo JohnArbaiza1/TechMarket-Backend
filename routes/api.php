@@ -127,49 +127,9 @@ Route::middleware('auth:sanctum')->group(function () {
     
         // Filtrar los resultados para incluir solo los datos necesarios
         $messages->each(function ($chat) use ($loggedInUserId) {
-            if ($chat->user_two_id !== $loggedInUserId && $chat->publication) {
-                // Agregar el campo is_selected dinámicamente
-                $chat->setAttribute('is_selected', $chat->publication->applicants->first()->is_selected ?? null);
-            } else {
-                $chat->setAttribute('is_selected', null);
-            }
-            unset($chat->publication->applicants); // Eliminar la relación applicants para no sobrecargar la respuesta
-        });
-    
-        Log::info('Mensajes obtenidos:', ['messages' => $messages]);
-        return $messages;
-    });
-
-    Route::get('/messages', function (Request $request) {
-        $loggedInUserId = $request->user()->id;
-    
-        $messages = Chats::query()
-            ->where(function ($query) use ($loggedInUserId) {
-                $query->where('user_one_id', $loggedInUserId)
-                    ->orWhere('user_two_id', $loggedInUserId);
-            })
-            ->with([
-                'userOne:id,user_name', 
-                'userTwo:id,user_name', 
-                'userOne.profile:id_user,image_url', 
-                'userTwo.profile:id_user,image_url',
-                'publication:id,title',
-                'messages' => function ($query) {
-                    $query->orderBy('created_at', 'asc'); 
-                },
-                'publication.applicants' => function ($query) use ($loggedInUserId) {
-                    $query->where('id_user', '!=', $loggedInUserId) // Excluir al usuario logueado
-                          ->select('id_publication', 'id_user', 'is_selected'); // Traer solo los campos necesarios
-                },
-            ])
-            ->get();
-    
-        // Filtrar los resultados para incluir solo los datos necesarios
-        Log::info('Mensajes obtenidos:', ['messages' => $messages]);
-        $messages->each(function ($chat) use ($loggedInUserId) {
             // Verificar si la publicación está cargada y tiene aplicaciones
             if ($chat->user_two_id !== $loggedInUserId && $chat->relationLoaded('publication') && $chat->publication) {
-                $applicant = $chat->publication->applicants->firstWhere('id_user', $chat->user_two_id);
+                $applicant = $chat->publication->applicants->where('id_user', $chat->user_two_id)->first();
                 $chat->setAttribute('is_selected', $applicant->is_selected ?? null);
             } else {
                 $chat->setAttribute('is_selected', null);
@@ -182,6 +142,42 @@ Route::middleware('auth:sanctum')->group(function () {
         });
     
         return $messages;
+    });
+
+    Route::post('/messages', function(Request $request) {
+        $request->validate([
+            'message' => 'required|string|max:1000',
+            'id_chat' => 'nullable|integer',
+            'user_two_id' => 'nullable|integer',
+            'id_publication' => 'nullable|integer',
+        ]);
+        // Verifica si el chat existe
+        $chat = Chats::find($request->id_chat);
+        if (!$chat) {
+            //Si el chat no existe, se crea uno nuevo
+            $chat = Chats::create([
+                'user_one_id' => $request->user()->id,
+                'user_two_id' => $request->user_two_id,
+                'id_publication' => $request->id_publication,
+            ]);
+
+            $message = ChatMessage::create([
+                'id_user' => $request->user()->id,
+                'message' => $request->message,
+                'message_status' => false,
+                'id_chat' => $chat->id,
+            ]);
+            broadcast(new ChatCreated($chat));
+        }else{
+            $message = ChatMessage::create([
+                'id_user' => $request->user()->id,
+                'message' => $request->message,
+                'message_status' => false,
+                'id_chat' => $request->id_chat,
+            ]);
+        }
+        broadcast(new MessageSend($message));
+        return $message;
     });
     //Cambiar estado del mensaje
     Route::put('/messages', function(Request $request) {
