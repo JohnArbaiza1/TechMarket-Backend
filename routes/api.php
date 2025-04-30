@@ -13,7 +13,10 @@ use App\Http\Controllers\ChatController;
 use App\Models\User;
 use App\Models\ChatMessage;
 use App\Models\Chats;
+use Illuminate\Container\Attributes\Auth;
 use Illuminate\Support\Facades\Broadcast;
+use App\Http\Controllers\FollowController;
+use Illuminate\Support\Facades\Log;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -73,6 +76,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/publication/{id_publication}', [PublicationsController::class, 'updatePublication']);
     //Ruta para eliminar una publicacion
     Route::delete('/publication/{id_publication}', [PublicationsController::class, 'deletePublication']);
+    //Ruta para obtener las publicaciones de un usuario min
+    Route::get('/publications/{id_user}/min', [PublicationsController::class, 'listPublicationsByUserMin']);
 
     //Ruta para crear un solicitante
     Route::post('/applicant', [ApplicantsControllerer::class, 'createApplicant']);
@@ -86,7 +91,12 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/applicant/{id_applicant}', [ApplicantsControllerer::class, 'deleteApplicant']);
     //Ruta para eliminar al solicitante por id de usuario y publicacion
     Route::delete('/applicants/user/{id_user}/publication/{id_publication}', [ApplicantsControllerer::class, 'deleteApplicantByUserPublication']);
-    
+    //Ruta para cambiar el estado de un solicitante
+    Route::put('/applicant', [ApplicantsControllerer::class, 'changeApplicantStatus']);
+    //Ruta para obtener los solicitantes de una publicacion por su estado
+    Route::get('/applicant/{id_publicacion}/accepted', [ApplicantsControllerer::class, 'getApplicantsByPublicationStatus']);
+
+
     //Ruta para crear un chat
     Route::post('/chat', [ChatController::class, 'createChat']);
     //Ruta para obtener todos los chats del usuario logueado
@@ -94,10 +104,12 @@ Route::middleware('auth:sanctum')->group(function () {
 
 
     Route::get('/messages', function (Request $request) {
-        return Chats::query()
-            ->where(function ($query) use ($request) {
-                $query->where('user_one_id', $request->user()->id)
-                    ->orWhere('user_two_id', $request->user()->id);
+        $loggedInUserId = $request->user()->id;
+    
+        $messages = Chats::query()
+            ->where(function ($query) use ($loggedInUserId) {
+                $query->where('user_one_id', $loggedInUserId)
+                    ->orWhere('user_two_id', $loggedInUserId);
             })
             ->with([
                 'userOne:id,user_name', 
@@ -108,9 +120,30 @@ Route::middleware('auth:sanctum')->group(function () {
                 'messages' => function ($query) {
                     $query->orderBy('created_at', 'asc'); 
                 },
+                'publication.applicants' => function ($query) use ($loggedInUserId) {
+                    $query->where('id_user', '!=', $loggedInUserId) // Excluir al usuario logueado
+                          ->select('id_publication', 'id_user', 'is_selected'); // Traer solo los campos necesarios
+                },
             ])
-            ->orderBy('created_at', 'asc')
             ->get();
+    
+        // Filtrar los resultados para incluir solo los datos necesarios
+        $messages->each(function ($chat) use ($loggedInUserId) {
+            // Verificar si la publicación está cargada y tiene aplicaciones
+            if ($chat->user_two_id !== $loggedInUserId && $chat->relationLoaded('publication') && $chat->publication) {
+                $applicant = $chat->publication->applicants->where('id_user', $chat->user_two_id)->first();
+                $chat->setAttribute('is_selected', $applicant->is_selected ?? null);
+            } else {
+                $chat->setAttribute('is_selected', null);
+            }
+    
+            // Eliminar la relación applicants para no sobrecargar la respuesta
+            if ($chat->relationLoaded('publication') && $chat->publication) {
+                unset($chat->publication->applicants);
+            }
+        });
+    
+        return $messages;
     });
 
     Route::post('/messages', function(Request $request) {
@@ -189,5 +222,17 @@ Route::middleware('auth:sanctum')->group(function () {
 
         return $chat;
     });
+
+    Route::post('/membershipsUpdate', [AuthController::class, 'updateMembership']);
+
+    //************************** Rutas para los seguidores ************************************
+    //Ruta para seguir usuario
+    Route::post('/follow/{id}', [FollowController::class, 'follow'])->name('follow');
+    //Ruta para dejar de seguir
+    Route::post('/unfollow/{id}', [FollowController::class, 'unfollow'])->name('unfollow');
+    //Ruta para obtener mis seguidores
+    Route::get('/followers', [FollowController::class, 'myFollowers'])->name('followers');
+    //Ruta para obtener a qienes sigo
+    Route::get('/following', [FollowController::class, 'myFollowing'])->name('following');
 });
 

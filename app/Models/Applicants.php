@@ -11,7 +11,12 @@ class Applicants extends Model
         'id',
         'id_publication',
         'id_user',
+        'id_selected',
         'created_at',
         'updated_at',
     ];
+    public function publication()
+    {
+        return $this->belongsTo(Publications::class, 'id_publication', 'id');
+    }
 }

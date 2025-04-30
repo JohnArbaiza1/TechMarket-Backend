@@ -22,4 +22,8 @@ class Publications extends Model
         'updated_at',
     ];
     public $timestamps = true;
+    public function applicants()
+    {
+        return $this->hasMany(Applicants::class, 'id_publication', 'id');
+    }
 }

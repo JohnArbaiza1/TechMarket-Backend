@@ -72,4 +72,34 @@ class User extends Authenticatable
     {
         return $this->hasOne(Profiles::class, 'id_user', 'id');
     }
+    public function membership()
+    {
+        return $this->belongsTo(Memberships::class, 'id_membership', 'id');
+    }
+
+    //Parte donde se trabaja lo de seguidores
+    //Verifica los Usuarios que yo sigo
+    public function following()
+    {
+        return $this->belongsToMany(User::class, 'follows', 'follower_id', 'followed_id');
+    }
+
+    //Verifica los Usuarios que me siguen
+    public function followers()
+    {
+        return $this->belongsToMany(User::class, 'follows', 'followed_id', 'follower_id');
+    }
+
+    // Verifica si el usuario ya sigue a otro usuario
+    public function isFollowing(User $user)
+    {
+        return $this->following->contains($user);
+    }
+
+    // Verifica si el usuario es seguido por otro usuario
+    public function isFollowedBy(User $user)
+    {
+        return $this->followers->contains($user);
+    }
+
 }

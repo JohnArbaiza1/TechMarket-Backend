@@ -22,7 +22,7 @@ class MessageSend implements ShouldBroadcastNow
      */
     public function __construct(public ChatMessage $message)
     {
-        Log::info('📢 Evento MessageSend disparado', ['mensaje' => $this->message->toArray()]);
+        
     }
 
     /**
@@ -33,10 +33,6 @@ class MessageSend implements ShouldBroadcastNow
     public function broadcastOn(): array
     {
         $channelName = 'chat.' .$this->message->id_chat;
-        Log::info('Llegando al broadcastOn', [
-            'id chat' => $this->message->id_chat,
-            'canal' => $channelName,
-        ]);
         
         return [
             new PrivateChannel($channelName),
