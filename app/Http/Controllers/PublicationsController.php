@@ -176,7 +176,7 @@ class PublicationsController extends Controller
     public function listPublications()
     {
         try {
-            $publications = Publications::all();
+            $publications = Publications::orderBy('created_at', 'desc')->get();
             if ($publications->isEmpty()) {
                 return response()->json(['error' => 'No se encontraron publicaciones'], 404);
             }
