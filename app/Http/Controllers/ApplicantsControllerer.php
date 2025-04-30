@@ -106,11 +106,17 @@ class ApplicantsControllerer extends Controller
     public function getApplicantsByUser($id_user)
     {
         try {
-            $applicants = Applicants::where('id_user', $id_user)->get();
+            $applicants = Applicants::where('id_user', $id_user)->where('is_selected', true)
+            ->with([
+                'publication:id,title'
+            ])
+            ->get();
 
             if ($applicants->isEmpty()) {
                 return response()->json($applicants, 200);
             }
+            
+
 
             return response()->json($applicants, 200);
         } catch (\Exception $e) {

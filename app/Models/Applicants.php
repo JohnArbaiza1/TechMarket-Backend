@@ -15,4 +15,8 @@ class Applicants extends Model
         'created_at',
         'updated_at',
     ];
+    public function publication()
+    {
+        return $this->belongsTo(Publications::class, 'id_publication', 'id');
+    }
 }

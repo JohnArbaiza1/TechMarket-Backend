@@ -200,6 +200,20 @@ class PublicationsController extends Controller
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
+    public function listPublicationsByUserMin($id_user)
+    {
+        try {
+            $publications = Publications::where('id_user', $id_user)->get(['id', 'title']);
+
+            if ($publications->isEmpty()) {
+                return response()->json(['error' => 'No se encontraron publicaciones para este usuario'], 200);
+            }
+
+            return response()->json($publications, 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
 
     /********************* Metodos para el Panel de Administración *********************/
     //Metodo para listar las publicaciones desde el backend
