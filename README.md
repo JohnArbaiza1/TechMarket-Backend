@@ -1,66 +1,69 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+<div align="center">
+  <h1> Bienvenido al Repositorio de la API del Equipo de TechMarket </h1> 
+  <table>
+  <tr>
+    <td>
+      <img src="https://github.com/user-attachments/assets/a35d0687-5450-41b2-9c4d-5f136f9647e5" width="350" height="350" />
+    </td>
+  </tr>
+</table>
+</div>
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
+<p>
+  Esta es la API de <strong>TechMarket</strong>, encargada de gestionar la lógica de negocio, el acceso a datos y la autenticación de usuarios. Proporciona los endpoints necesarios para conectar el frontend con los servicios de base de datos, control de suscripciones y gestión de proyectos. 
+  Diseñada para ser escalable y segura, esta API es la columna vertebral que permite a TechMarket conectar desarrolladores con oportunidades reales.
 </p>
 
-## About Laravel
+## 🛠️ Construido con
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+<div align="center">
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+<table>
+  <tr>
+    <td align="center">
+      <strong>Para la API</strong><br>
+      <a href="https://laravel.com" target="_blank">
+        <img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="300" alt="Laravel Logo">
+      </a>
+    </td>
+    <td align="center">
+      <strong>Para el Panel de Administración</strong><br>
+      <img src="https://github.com/user-attachments/assets/34a85de5-99cd-44b2-b99a-2b5774430fda" width="300" alt="Panel Admin">
+    </td>
+  </tr>
+</table>
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+</div>
 
-## Learning Laravel
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## 💻 IDES y Herramientas empleadas.
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+<div align="center">
+    <p align="center">
+      <a href="https://skillicons.dev">
+        <img src="https://skillicons.dev/icons?i=git,github,npm,vscode,vite,postman,discord" />
+      </a>
+    </p>
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+<img src="https://github.com/user-attachments/assets/851d906b-9d66-4489-9bda-3a50cdfa5fc2" width="300" alt="Panel Admin">
 
-## Laravel Sponsors
+</div>
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+## 📖 Wiki 
+Si deseas profundizar en las herramientas implementadas, te compartimos sus sitios oficiales a continuación:
 
-### Premium Partners
+- [Vite](https://vite.dev/guide/)
+- [Laravel](https://laravel.com/docs/11.x)
+- [Tailwind CSS](https://tailwindcss.com/docs/installation/using-vite) 
+- [PostgreSQL](https://www.postgresql.org/docs/)
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
 
-## Contributing
+## 👨‍💻 Desarrolladores
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+<img src="https://i.pinimg.com/originals/90/70/32/9070324cdfc07c68d60eed0c39e77573.gif" width="550" height="350">
 
-## Code of Conduct
+* John Elvis Arbaiza Velásquez  <a href="https://github.com/JohnArbaiza1" >JohnArbaiza1 </a>
+* Diego Isaac García Pimentel <a href="https://github.com/DIGP1" >DIGP1 </a>
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
 
-## Security Vulnerabilities
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
