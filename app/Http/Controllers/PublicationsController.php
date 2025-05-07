@@ -214,6 +214,20 @@ class PublicationsController extends Controller
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
+    public function listPublicationByPage($page){
+        try {
+            $publications = Publications::where('quota', '>', 0)
+                ->orderBy('created_at', 'desc')
+                ->paginate(6, ['*'], 'page', $page);
+            if ($publications->isEmpty()) {
+                return response()->json(['error' => 'No se encontraron publicaciones'], 404);
+            }
+
+            return response()->json($publications, 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
 
     /********************* Metodos para el Panel de Administración *********************/
     //Metodo para listar las publicaciones desde el backend

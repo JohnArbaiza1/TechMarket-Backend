@@ -78,6 +78,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/publication/{id_publication}', [PublicationsController::class, 'deletePublication']);
     //Ruta para obtener las publicaciones de un usuario min
     Route::get('/publications/{id_user}/min', [PublicationsController::class, 'listPublicationsByUserMin']);
+    //Ruta para obtener publicaciones por page
+    Route::get('/publications/page/{page}', [PublicationsController::class, 'listPublicationByPage']);
 
     //Ruta para crear un solicitante
     Route::post('/applicant', [ApplicantsControllerer::class, 'createApplicant']);
